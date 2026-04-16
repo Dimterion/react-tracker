@@ -1,14 +1,23 @@
+import { globalStyles } from "@/styles/global";
 import * as Device from "expo-device";
-import { Platform, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
   return (
-    <View style={{ backgroundColor: "red" }}>
-      <Text>Welcome.</Text>
-      <Text>React Tracker: {Platform.OS}</Text>
+    <View style={globalStyles.container}>
+      <Text style={styles.title}>Welcome.</Text>
+      <Text style={{ backgroundColor: "red", marginTop: 30 }}>
+        React Tracker: {Platform.OS}
+      </Text>
       <Text>React Tracker: {Device.modelName}</Text>
       <Text>React Tracker: {Device.brand}</Text>
       <Text>React Tracker: {Device.osVersion}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 28,
+  },
+});
