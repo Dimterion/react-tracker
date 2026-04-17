@@ -38,6 +38,7 @@ yarn-error.*
 
 app-example
 .vscode
+.idea
 
 # generated native folders
 /ios

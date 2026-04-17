@@ -16,14 +16,9 @@ export default function HomeHeader() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
   date: {
     fontSize: 14,
-    color: colors.text,
+    color: colors.textSecondary,
     marginTop: 4,
     marginBottom: 30,
   },
