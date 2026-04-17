@@ -11,6 +11,9 @@ export default function HomeScreen() {
       <Link href="/tracking" style={{ fontSize: 18, color: "#00b4d8" }}>
         Go to Tracking
       </Link>
+      <Link href="/add-tracker" style={{ fontSize: 18, color: "#00b4d8" }}>
+        Add Tracker
+      </Link>
     </ScrollView>
   );
 }

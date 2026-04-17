@@ -14,6 +14,7 @@ export default function RootLayout() {
         options={{ headerShown: false, title: "Home" }}
       />
       <Stack.Screen options={{ title: "Tracking" }} name="tracking" />
+      <Stack.Screen options={{ title: "Add Tracker" }} name="add-tracker" />
     </Stack>
   );
 }
