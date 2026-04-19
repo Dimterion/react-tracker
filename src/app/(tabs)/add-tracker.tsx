@@ -1,6 +1,9 @@
+import { addTracker } from "@/storage/tracks";
 import { colors, globalStyles } from "@/styles/global";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -15,8 +18,29 @@ export default function AddTrackerScreen() {
   const [el3, setEl3] = useState("");
   const [el4, setEl4] = useState("");
 
-  const handleAddTracker = () => {
-    console.log({ name, el1, el2, el3, el4 });
+  const handleAddTracker = async () => {
+    if (!name || !el1) {
+      Alert.alert("Error", "Please enter a track name and el1.");
+      return;
+    }
+
+    await addTracker({
+      name,
+      el1: Number(el1),
+      el2: Number(el2) || 0,
+      el3: Number(el3) || 0,
+      el4: Number(el4) || 0,
+    });
+
+    setName("");
+    setEl1("");
+    setEl2("");
+    setEl3("");
+    setEl4("");
+
+    Alert.alert("Success", "Track added successfully!");
+
+    router.push("/");
   };
 
   return (

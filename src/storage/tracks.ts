@@ -17,7 +17,7 @@ export const getTracks = async (): Promise<Track[]> => {
   return data ? JSON.parse(data) : [];
 };
 
-export const addTrack = async (
+export const addTracker = async (
   track: Omit<Track, "id" | "createdAt">,
 ): Promise<Track> => {
   const tracks = await getTracks();
