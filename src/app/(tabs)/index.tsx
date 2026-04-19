@@ -26,7 +26,7 @@ export default function HomeScreen() {
     <ScrollView style={globalStyles.container}>
       <Text style={globalStyles.title}>React Tracker</Text>
       <HomeHeader />
-      <TrackingGrid />
+      <TrackingGrid tracks={tracking} />
       <RecentTrackings tracks={tracking} />
     </ScrollView>
   );

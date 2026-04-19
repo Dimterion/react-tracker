@@ -27,7 +27,7 @@ export default function TrackingItem({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#16213e",
+    backgroundColor: "#fefae0",
     borderRadius: 10,
     padding: 16,
     marginBottom: 10,
@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#ffffff",
+    color: "#03045e",
   },
   elements: {
     fontSize: 13,
-    color: "#a0a0b0",
+    color: "#0077b6",
     marginTop: 4,
   },
 });
