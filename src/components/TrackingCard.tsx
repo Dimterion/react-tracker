@@ -24,7 +24,7 @@ export default function TrackingCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#16213e",
+    backgroundColor: "#fefae0",
     borderRadius: 12,
     padding: 16,
     width: "47%",
@@ -32,17 +32,17 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "#a0a0b0",
+    color: "#0077b6",
   },
   value: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#03045e",
     marginTop: 4,
   },
   goal: {
     fontSize: 14,
-    color: "#a0a0b0",
+    color: "#0077b6",
     marginTop: 2,
   },
 });
