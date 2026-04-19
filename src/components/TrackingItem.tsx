@@ -1,33 +1,53 @@
-import { StyleSheet, Text, View } from "react-native";
+import { deleteTrack } from "@/storage/tracks";
+import { colors } from "@/styles/global";
+import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type TrackingItemProps = {
+  id: string;
   name: string;
   el1: number;
   el2: number;
   el3: number;
   el4: number;
+  onDelete: () => void;
 };
 
 export default function TrackingItem({
+  id,
   name,
   el1,
   el2,
   el3,
   el4,
+  onDelete,
 }: TrackingItemProps) {
+  const handleLongPress = () => {
+    Alert.alert("Delete Track", `Are you sure you want to delete "${name}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await deleteTrack(id);
+          onDelete();
+        },
+      },
+    ]);
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onLongPress={handleLongPress}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.elements}>
         {el1} • {el2} • {el3} • {el4}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fefae0",
+    backgroundColor: colors.surface,
     borderRadius: 10,
     padding: 16,
     marginBottom: 10,
@@ -35,11 +55,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#03045e",
+    color: colors.text,
   },
   elements: {
     fontSize: 13,
-    color: "#0077b6",
+    color: colors.textSecondary,
     marginTop: 4,
   },
 });

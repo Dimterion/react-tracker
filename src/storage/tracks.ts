@@ -29,3 +29,9 @@ export const addTracker = async (
   await AsyncStorage.setItem(TRACKS_KEY, JSON.stringify([newTrack, ...tracks]));
   return newTrack;
 };
+
+export const deleteTrack = async (id: string): Promise<void> => {
+  const tracks = await getTracks();
+  const filtered = tracks.filter((track) => track.id !== id);
+  await AsyncStorage.setItem(TRACKS_KEY, JSON.stringify(filtered));
+};

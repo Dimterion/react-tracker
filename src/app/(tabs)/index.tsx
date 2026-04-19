@@ -27,7 +27,7 @@ export default function HomeScreen() {
       <Text style={globalStyles.title}>React Tracker</Text>
       <HomeHeader />
       <TrackingGrid tracks={tracking} />
-      <RecentTrackings tracks={tracking} />
+      <RecentTrackings tracks={tracking} onDelete={loadTracking} />
     </ScrollView>
   );
 }
