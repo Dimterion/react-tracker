@@ -1,5 +1,6 @@
 import { addTracker } from "@/storage/tracks";
 import { colors, globalStyles } from "@/styles/global";
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -39,6 +40,7 @@ export default function AddTrackerScreen() {
     setEl4("");
 
     Alert.alert("Success", "Track added successfully!");
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
     router.push("/");
   };

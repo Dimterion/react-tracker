@@ -1,5 +1,6 @@
 import { deleteTrack } from "@/storage/tracks";
 import { colors } from "@/styles/global";
+import * as Haptics from "expo-haptics";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type TrackingItemProps = {
@@ -29,6 +30,7 @@ export default function TrackingItem({
         style: "destructive",
         onPress: async () => {
           await deleteTrack(id);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           onDelete();
         },
       },
