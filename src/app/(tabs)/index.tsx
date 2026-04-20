@@ -1,3 +1,4 @@
+import CopyButton from "@/components/CopyButton";
 import HomeHeader from "@/components/HomeHeader";
 import RecentTrackings from "@/components/RecentTrackings";
 import ShareButton from "@/components/ShareButton";
@@ -31,6 +32,7 @@ export default function HomeScreen() {
       </View>
       <HomeHeader />
       <TrackingGrid tracks={tracking} />
+      <CopyButton tracks={tracking} />
       <RecentTrackings tracks={tracking} onDelete={loadTracking} />
     </ScrollView>
   );
