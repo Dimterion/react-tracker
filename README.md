@@ -12,7 +12,7 @@ React Native / TypeScript application
 
 ## <a id="introduction"></a>🔎 Introduction
 
-React Native application.
+React Native playground application.
 
 ## <a id="tech-stack"></a>⚙️ Tech Stack
 
