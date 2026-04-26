@@ -1,15 +1,12 @@
-import { Text, View } from "react-native";
+import HomeHeader from "@/components/Header";
+import { globalStyles } from "@/styles/global";
+import { ScrollView, Text } from "react-native";
 
-export default function Index() {
+export default function HomeScreen() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Home screen</Text>
-    </View>
+    <ScrollView style={globalStyles.container}>
+      <Text style={globalStyles.title}>React Native Playground</Text>
+      <HomeHeader />
+    </ScrollView>
   );
 }
