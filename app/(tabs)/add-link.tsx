@@ -1,6 +1,9 @@
+import { addLink } from "@/storage/links";
 import { colors, globalStyles } from "@/styles/global";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -12,8 +15,23 @@ export default function AddLinkScreen() {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
 
-  const handleAddLink = () => {
-    console.log({ name, link });
+  const handleAddLink = async () => {
+    if (!name || !link) {
+      Alert.alert("Error", "Please enter a link.");
+      return;
+    }
+
+    await addLink({
+      name,
+      link: Number(link),
+    });
+
+    setName("");
+    setLink("");
+
+    Alert.alert("Success", "Link added successfully!");
+
+    router.push("/");
   };
 
   return (

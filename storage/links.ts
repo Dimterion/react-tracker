@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export type Link = {
   id: string;
   name: string;
+  link: number;
   createdAt: string;
 };
 
