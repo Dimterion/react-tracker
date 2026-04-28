@@ -23,7 +23,7 @@ export default function AddLinkScreen() {
 
     await addLink({
       name,
-      link: Number(link),
+      reglink: Number(link),
     });
 
     setName("");
