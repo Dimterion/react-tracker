@@ -9,7 +9,7 @@ export default function LinkItem({ name, link }: LinkItemProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.macros}>{link}</Text>
+      <Text style={styles.links}>{link}</Text>
     </View>
   );
 }
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#ffffff",
   },
-  macros: {
+  links: {
     fontSize: 13,
     color: "#a0a0b0",
     marginTop: 4,
