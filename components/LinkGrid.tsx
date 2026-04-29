@@ -1,13 +1,45 @@
+import { Link } from "@/storage/links";
 import { StyleSheet, View } from "react-native";
 import LinkCard from "./LinkCard";
 
-export default function LinkGrid() {
+type LinkGridProps = {
+  links: Link[];
+};
+
+export default function LinkGrid({ links }: LinkGridProps) {
+  const totals = links.reduce(
+    (acc, link) => ({
+      reglink: acc.reglink + link.reglink,
+    }),
+    { reglink: 0 },
+  );
+
   return (
     <View style={styles.grid}>
-      <LinkCard label="" value="0" source="0" color="#ff6b6b" />
-      <LinkCard label="" value="0" source="0" color="#4ecdc4" />
-      <LinkCard label="" value="0" source="0" color="#ffd93d" />
-      <LinkCard label="" value="0" source="0" color="#6bcb77" />
+      <LinkCard
+        label=""
+        value={`${totals.reglink}`}
+        source="0"
+        color="#ff6b6b"
+      />
+      <LinkCard
+        label=""
+        value={`${totals.reglink}`}
+        source="0"
+        color="#4ecdc4"
+      />
+      <LinkCard
+        label=""
+        value={`${totals.reglink}`}
+        source="0"
+        color="#ffd93d"
+      />
+      <LinkCard
+        label=""
+        value={`${totals.reglink}`}
+        source="0"
+        color="#6bcb77"
+      />
     </View>
   );
 }

@@ -26,8 +26,8 @@ export default function HomeScreen() {
     <ScrollView style={globalStyles.container}>
       <Text style={globalStyles.title}>React Native Playground</Text>
       <Header />
-      <LinkGrid />
-      <RecentLinks />
+      <LinkGrid links={links} />
+      <RecentLinks links={links} />
     </ScrollView>
   );
 }
