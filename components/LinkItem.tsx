@@ -1,16 +1,33 @@
-import { StyleSheet, Text, View } from "react-native";
+import { deleteLink } from "@/storage/links";
+import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type LinkItemProps = {
+  id: string;
   name: string;
   link: number;
+  onDelete: () => void;
 };
 
-export default function LinkItem({ name, link }: LinkItemProps) {
+export default function LinkItem({ id, name, link, onDelete }: LinkItemProps) {
+  const handleLongPress = () => {
+    Alert.alert("Delete link", `Are you sure you want to delete "${name}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await deleteLink(id);
+          onDelete();
+        },
+      },
+    ]);
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onLongPress={handleLongPress}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.links}>{link}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

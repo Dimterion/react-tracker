@@ -26,3 +26,9 @@ export const addLink = async (
   await AsyncStorage.setItem(LINKS_KEY, JSON.stringify([newLink, ...links]));
   return newLink;
 };
+
+export const deleteLink = async (id: string): Promise<void> => {
+  const links = await getLinks();
+  const filtered = links.filter((link) => link.id !== id);
+  await AsyncStorage.setItem(LINKS_KEY, JSON.stringify(filtered));
+};
