@@ -1,14 +1,42 @@
+import LinkItem from "@/components/LinkItem";
+import { getLinks, Link } from "@/storage/links";
 import { globalStyles } from "@/styles/global";
-import { Link } from "expo-router";
-import { ScrollView, Text } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { ScrollView, Text, View } from "react-native";
 
 export default function LinksScreen() {
+  const [links, setLinks] = useState<Link[]>([]);
+
+  const loadLinks = async () => {
+    const data = await getLinks();
+    setLinks(data);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      loadLinks();
+    }, []),
+  );
+
   return (
     <ScrollView style={globalStyles.container}>
       <Text style={globalStyles.title}>All Links</Text>
-      <Link href="/add-link" style={{ fontSize: 18, color: "#007bff" }}>
-        Add New Link
-      </Link>
+      <View style={{ marginTop: 30 }}>
+        {links.length === 0 ? (
+          <Text style={globalStyles.empty}>No links logged yet.</Text>
+        ) : (
+          links.map((link) => (
+            <LinkItem
+              key={link.id}
+              id={link.id}
+              name={link.name}
+              link={link.reglink}
+              onDelete={loadLinks}
+            />
+          ))
+        )}
+      </View>
     </ScrollView>
   );
 }
