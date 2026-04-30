@@ -32,3 +32,7 @@ export const deleteLink = async (id: string): Promise<void> => {
   const filtered = links.filter((link) => link.id !== id);
   await AsyncStorage.setItem(LINKS_KEY, JSON.stringify(filtered));
 };
+
+export const clearAllLinks = async (): Promise<void> => {
+  await AsyncStorage.removeItem(LINKS_KEY);
+};

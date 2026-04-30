@@ -1,9 +1,9 @@
 import LinkItem from "@/components/LinkItem";
-import { getLinks, Link } from "@/storage/links";
+import { clearAllLinks, getLinks, Link } from "@/storage/links";
 import { globalStyles } from "@/styles/global";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function LinksScreen() {
   const [links, setLinks] = useState<Link[]>([]);
@@ -11,6 +11,11 @@ export default function LinksScreen() {
   const loadLinks = async () => {
     const data = await getLinks();
     setLinks(data);
+  };
+
+  const handleClearAll = async () => {
+    await clearAllLinks();
+    loadLinks();
   };
 
   useFocusEffect(
@@ -21,7 +26,12 @@ export default function LinksScreen() {
 
   return (
     <ScrollView style={globalStyles.container}>
-      <Text style={globalStyles.title}>All Links</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.title}>All Links</Text>
+        <TouchableOpacity onPress={handleClearAll}>
+          <Text style={styles.clearButton}>Clear All</Text>
+        </TouchableOpacity>
+      </View>
       <View style={{ marginTop: 30 }}>
         {links.length === 0 ? (
           <Text style={globalStyles.empty}>No links logged yet.</Text>
@@ -40,3 +50,10 @@ export default function LinksScreen() {
     </ScrollView>
   );
 }
+
+const styles = {
+  clearButton: {
+    color: "red",
+    fontSize: 16,
+  },
+};
