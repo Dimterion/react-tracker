@@ -1,11 +1,12 @@
 import Header from "@/components/Header";
 import LinkGrid from "@/components/LinkGrid";
 import RecentLinks from "@/components/RecentLinks";
+import ShareButton from "@/components/ShareButton";
 import { getLinks, Link } from "@/storage/links";
 import { globalStyles } from "@/styles/global";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { ScrollView, Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const [links, setLinks] = useState<Link[]>([]);
@@ -24,7 +25,10 @@ export default function HomeScreen() {
 
   return (
     <ScrollView style={globalStyles.container}>
-      <Text style={globalStyles.title}>React Native Playground</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.title}>React Native Playground</Text>
+        <ShareButton links={links} />
+      </View>
       <Header />
       <LinkGrid links={links} />
       <RecentLinks links={links} onDelete={loadLinks} />
