@@ -1,4 +1,5 @@
 import { deleteLink } from "@/storage/links";
+import * as Haptics from "expo-haptics";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type LinkItemProps = {
@@ -17,6 +18,7 @@ export default function LinkItem({ id, name, link, onDelete }: LinkItemProps) {
         style: "destructive",
         onPress: async () => {
           await deleteLink(id);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           onDelete();
         },
       },
