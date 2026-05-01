@@ -2,6 +2,7 @@ import CopyButton from "@/components/CopyButton";
 import Header from "@/components/Header";
 import LinkGrid from "@/components/LinkGrid";
 import RecentLinks from "@/components/RecentLinks";
+import ReminderToggle from "@/components/ReminderToggle";
 import ShareButton from "@/components/ShareButton";
 import { getLinks, Link } from "@/storage/links";
 import { globalStyles } from "@/styles/global";
@@ -33,6 +34,7 @@ export default function HomeScreen() {
       <Header />
       <LinkGrid links={links} />
       <CopyButton links={links} />
+      <ReminderToggle />
       <RecentLinks links={links} onDelete={loadLinks} />
     </ScrollView>
   );
