@@ -1,3 +1,4 @@
+import CopyButton from "@/components/CopyButton";
 import Header from "@/components/Header";
 import LinkGrid from "@/components/LinkGrid";
 import RecentLinks from "@/components/RecentLinks";
@@ -31,6 +32,7 @@ export default function HomeScreen() {
       </View>
       <Header />
       <LinkGrid links={links} />
+      <CopyButton links={links} />
       <RecentLinks links={links} onDelete={loadLinks} />
     </ScrollView>
   );
