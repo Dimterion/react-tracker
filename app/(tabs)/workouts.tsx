@@ -1,4 +1,4 @@
-import LinkItem from "@/components/LinkItem";
+import LinkItem from "@/features/workouts/components/LinkItem";
 import {
   clearAllLinks,
   getLinks,

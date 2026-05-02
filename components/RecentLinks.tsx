@@ -1,7 +1,7 @@
 import { WorkoutSession } from "@/features/workouts/storage/workouts";
 import { globalStyles } from "@/styles/global";
 import { Text, View } from "react-native";
-import LinkItem from "./LinkItem";
+import LinkItem from "../features/workouts/components/LinkItem";
 
 type RecentLinksProps = {
   links: WorkoutSession[];
