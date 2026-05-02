@@ -14,7 +14,7 @@ export const getLinks = async (): Promise<Link[]> => {
   return data ? JSON.parse(data) : [];
 };
 
-export const addLink = async (
+export const newWorkout = async (
   link: Omit<Link, "id" | "createdAt">,
 ): Promise<Link> => {
   const links = await getLinks();

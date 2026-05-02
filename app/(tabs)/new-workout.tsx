@@ -1,4 +1,4 @@
-import { addLink } from "@/storage/links";
+import { newWorkout } from "@/storage/links";
 import { colors, globalStyles } from "@/styles/global";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
@@ -12,17 +12,17 @@ import {
   View,
 } from "react-native";
 
-export default function AddLinkScreen() {
+export default function NewWorkoutScreen() {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
 
-  const handleAddLink = async () => {
+  const handleNewWorkout = async () => {
     if (!name || !link) {
       Alert.alert("Error", "Please enter a link.");
       return;
     }
 
-    await addLink({
+    await newWorkout({
       name,
       reglink: Number(link),
     });
@@ -39,7 +39,7 @@ export default function AddLinkScreen() {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Add Link</Text>
+      <Text style={globalStyles.title}>New Workout</Text>
 
       <TextInput
         style={styles.input}
@@ -58,8 +58,8 @@ export default function AddLinkScreen() {
         onChangeText={setLink}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleAddLink}>
-        <Text style={styles.buttonText}>Add Link</Text>
+      <TouchableOpacity style={styles.button} onPress={handleNewWorkout}>
+        <Text style={styles.buttonText}>New Workout</Text>
       </TouchableOpacity>
     </View>
   );

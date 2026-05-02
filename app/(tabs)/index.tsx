@@ -28,7 +28,7 @@ export default function HomeScreen() {
   return (
     <ScrollView style={globalStyles.container}>
       <View style={globalStyles.header}>
-        <Text style={globalStyles.title}>React Native Playground</Text>
+        <Text style={globalStyles.title}>Workout Log</Text>
         <ShareButton links={links} />
       </View>
       <Header />
