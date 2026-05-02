@@ -1,4 +1,4 @@
-import { WorkoutSession } from "@/storage/workouts";
+import { WorkoutSession } from "@/features/workouts/storage/workouts";
 import { globalStyles } from "@/styles/global";
 import { Text, View } from "react-native";
 import LinkItem from "./LinkItem";

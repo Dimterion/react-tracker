@@ -1,4 +1,4 @@
-import { WorkoutSession } from "@/storage/workouts";
+import { WorkoutSession } from "@/features/workouts/storage/workouts";
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";

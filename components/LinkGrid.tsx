@@ -1,4 +1,4 @@
-import { WorkoutSession } from "@/storage/workouts";
+import { WorkoutSession } from "@/features/workouts/storage/workouts";
 import { StyleSheet, View } from "react-native";
 import LinkCard from "./LinkCard";
 

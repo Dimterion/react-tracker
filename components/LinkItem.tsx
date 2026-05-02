@@ -1,4 +1,4 @@
-import { deleteLink } from "@/storage/workouts";
+import { deleteLink } from "@/features/workouts/storage/workouts";
 import * as Haptics from "expo-haptics";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 

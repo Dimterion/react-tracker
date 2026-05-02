@@ -4,7 +4,7 @@ import LinkGrid from "@/components/LinkGrid";
 import RecentLinks from "@/components/RecentLinks";
 import ReminderToggle from "@/components/ReminderToggle";
 import ShareButton from "@/components/ShareButton";
-import { getLinks, WorkoutSession } from "@/storage/workouts";
+import { getLinks, WorkoutSession } from "@/features/workouts/storage/workouts";
 import { globalStyles } from "@/styles/global";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";

@@ -1,5 +1,9 @@
 import LinkItem from "@/components/LinkItem";
-import { clearAllLinks, getLinks, WorkoutSession } from "@/storage/workouts";
+import {
+  clearAllLinks,
+  getLinks,
+  WorkoutSession,
+} from "@/features/workouts/storage/workouts";
 import { globalStyles } from "@/styles/global";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
