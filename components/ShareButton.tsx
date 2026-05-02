@@ -1,10 +1,10 @@
-import { Link } from "@/storage/links";
+import { WorkoutSession } from "@/storage/workouts";
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { Share, TouchableOpacity } from "react-native";
 
 type ShareButtonProps = {
-  links: Link[];
+  links: WorkoutSession[];
 };
 
 export default function ShareButton({ links }: ShareButtonProps) {

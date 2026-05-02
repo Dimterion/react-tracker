@@ -1,9 +1,9 @@
-import { Link } from "@/storage/links";
+import { WorkoutSession } from "@/storage/workouts";
 import { StyleSheet, View } from "react-native";
 import LinkCard from "./LinkCard";
 
 type LinkGridProps = {
-  links: Link[];
+  links: WorkoutSession[];
 };
 
 export default function LinkGrid({ links }: LinkGridProps) {

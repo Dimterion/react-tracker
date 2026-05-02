@@ -1,4 +1,4 @@
-import { newWorkout } from "@/storage/links";
+import { newWorkout } from "@/storage/workouts";
 import { colors, globalStyles } from "@/styles/global";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";

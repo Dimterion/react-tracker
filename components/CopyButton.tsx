@@ -1,4 +1,4 @@
-import { Link } from "@/storage/links";
+import { WorkoutSession } from "@/storage/workouts";
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
@@ -6,7 +6,7 @@ import * as Haptics from "expo-haptics";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type CopyButtonProps = {
-  links: Link[];
+  links: WorkoutSession[];
 };
 
 export default function CopyButton({ links }: CopyButtonProps) {

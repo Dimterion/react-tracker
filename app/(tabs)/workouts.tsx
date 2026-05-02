@@ -1,12 +1,12 @@
 import LinkItem from "@/components/LinkItem";
-import { clearAllLinks, getLinks, Link } from "@/storage/links";
+import { clearAllLinks, getLinks, WorkoutSession } from "@/storage/workouts";
 import { globalStyles } from "@/styles/global";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function LinksScreen() {
-  const [links, setLinks] = useState<Link[]>([]);
+  const [links, setLinks] = useState<WorkoutSession[]>([]);
 
   const loadLinks = async () => {
     const data = await getLinks();

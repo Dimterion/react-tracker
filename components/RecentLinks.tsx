@@ -1,10 +1,10 @@
-import { Link } from "@/storage/links";
+import { WorkoutSession } from "@/storage/workouts";
 import { globalStyles } from "@/styles/global";
 import { Text, View } from "react-native";
 import LinkItem from "./LinkItem";
 
 type RecentLinksProps = {
-  links: Link[];
+  links: WorkoutSession[];
   onDelete: () => void;
 };
 
