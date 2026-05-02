@@ -27,14 +27,14 @@ export default function LinksScreen() {
   return (
     <ScrollView style={globalStyles.container}>
       <View style={globalStyles.header}>
-        <Text style={globalStyles.title}>All Links</Text>
+        <Text style={globalStyles.title}>Workouts</Text>
         <TouchableOpacity onPress={handleClearAll}>
           <Text style={styles.clearButton}>Clear All</Text>
         </TouchableOpacity>
       </View>
       <View style={{ marginTop: 30 }}>
         {links.length === 0 ? (
-          <Text style={globalStyles.empty}>No links logged yet.</Text>
+          <Text style={globalStyles.empty}>No workouts logged yet.</Text>
         ) : (
           links.map((link) => (
             <LinkItem

@@ -11,18 +11,22 @@ type LinkItemProps = {
 
 export default function LinkItem({ id, name, link, onDelete }: LinkItemProps) {
   const handleLongPress = () => {
-    Alert.alert("Delete link", `Are you sure you want to delete "${name}"?`, [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          await deleteLink(id);
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          onDelete();
+    Alert.alert(
+      "Delete workout",
+      `Are you sure you want to delete "${name}"?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            await deleteLink(id);
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            onDelete();
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
 
   return (

@@ -35,7 +35,7 @@ export default function ReminderToggle() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Link Reminders</Text>
+      <Text style={styles.label}>Workout Reminders</Text>
       <Switch
         value={enabled}
         onValueChange={toggle}

@@ -18,7 +18,7 @@ export default function CopyButton({ links }: CopyButtonProps) {
       { reglink: 0 },
     );
 
-    const summary = `Summary\n\nLinks: ${totals.reglink} logged.`;
+    const summary = `Workout\n\nSummary: ${totals.reglink} logged.`;
 
     await Clipboard.setStringAsync(summary);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

@@ -11,9 +11,9 @@ type RecentLinksProps = {
 export default function RecentLinks({ links, onDelete }: RecentLinksProps) {
   return (
     <View style={{ marginTop: 30 }}>
-      <Text style={globalStyles.sectionTitle}>Recent Links</Text>
+      <Text style={globalStyles.sectionTitle}>Recent Workouts</Text>
       {links.length === 0 ? (
-        <Text style={globalStyles.empty}>No links logged yet.</Text>
+        <Text style={globalStyles.empty}>No workouts logged yet.</Text>
       ) : (
         links
           .slice(0, 5)

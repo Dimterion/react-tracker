@@ -21,7 +21,7 @@ export const scheduleLinkReminders = async () => {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "React Tracker",
-      body: "Log your links.",
+      body: "Log your workouts.",
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
@@ -33,7 +33,7 @@ export const scheduleLinkReminders = async () => {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "React Tracker",
-      body: "Log your links.",
+      body: "Log your workouts.",
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
