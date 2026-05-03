@@ -1,6 +1,6 @@
-import { colors } from "@/styles/global";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
+import { colors } from "../../styles/global";
 
 export default function TabLayout() {
   return (
@@ -25,20 +25,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="new-workout"
-        options={{
-          title: "New Workout",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="workouts"
         options={{
           title: "Workouts",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list" size={size} color={color} />
+            <Ionicons name="barbell" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="progress"
+        options={{
+          title: "Progress",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="stats-chart" size={size} color={color} />
           ),
         }}
       />
