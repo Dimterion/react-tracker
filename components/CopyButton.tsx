@@ -28,7 +28,7 @@ export default function CopyButton({ links }: CopyButtonProps) {
   return (
     <TouchableOpacity style={styles.button} onPress={handleCopy}>
       <Ionicons name="copy-outline" size={18} color={colors.primary} />
-      <Text style={styles.text}>Copy Summary</Text>
+      <Text style={styles.text}>Copy</Text>
     </TouchableOpacity>
   );
 }

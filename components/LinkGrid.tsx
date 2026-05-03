@@ -1,3 +1,4 @@
+/* TO-DO: refactor or delete later */
 import { WorkoutSession } from "@/features/workouts/storage/workouts";
 import { StyleSheet, View } from "react-native";
 import LinkCard from "./LinkCard";

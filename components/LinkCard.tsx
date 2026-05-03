@@ -1,3 +1,4 @@
+/* TO-DO: refactor or delete later */
 import { StyleSheet, Text, View } from "react-native";
 
 type LinkCardProps = {
@@ -7,7 +8,12 @@ type LinkCardProps = {
   color: string;
 };
 
-export default function LinkCard({ label, value, source, color }: LinkCardProps) {
+export default function LinkCard({
+  label,
+  value,
+  source,
+  color,
+}: LinkCardProps) {
   return (
     <View style={[styles.card, { borderLeftColor: color }]}>
       <Text style={styles.label}>{label}</Text>
