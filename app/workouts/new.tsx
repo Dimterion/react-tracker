@@ -1,5 +1,3 @@
-import { newWorkout } from "@/features/workouts/storage/workouts";
-import { colors, globalStyles } from "@/styles/global";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -12,29 +10,38 @@ import {
   View,
 } from "react-native";
 
-export default function NewWorkoutScreen() {
-  const [name, setName] = useState("");
-  const [link, setLink] = useState("");
+import { addWorkout } from "../../features/workouts/storage";
+import { WorkoutCategory } from "../../features/workouts/types";
+import { colors, globalStyles } from "../../styles/global";
 
-  const handleNewWorkout = async () => {
-    if (!name || !link) {
-      Alert.alert("Error", "Please enter a link.");
+export default function NewWorkoutScreen() {
+  const [title, setTitle] = useState("");
+  const [durationMinutes, setDurationMinutes] = useState("");
+  const [notes, setNotes] = useState("");
+  const [category] = useState<WorkoutCategory>("strength");
+
+  const handleAddWorkout = async () => {
+    if (!title || !durationMinutes) {
+      Alert.alert("Error", "Please enter a workout title and duration.");
       return;
     }
 
-    await newWorkout({
-      name,
-      reglink: Number(link),
+    await addWorkout({
+      title,
+      category,
+      durationMinutes: Number(durationMinutes),
+      completedAt: new Date().toISOString(),
+      notes,
     });
 
-    setName("");
-    setLink("");
+    setTitle("");
+    setDurationMinutes("");
+    setNotes("");
 
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-    Alert.alert("Success", "Link added successfully!");
-
-    router.push("/");
+    Alert.alert("Success", "Workout added successfully!");
+    router.back();
   };
 
   return (
@@ -43,23 +50,32 @@ export default function NewWorkoutScreen() {
 
       <TextInput
         style={styles.input}
-        placeholder="Link name"
+        placeholder="Workout title"
         placeholderTextColor={colors.textSecondary}
-        value={name}
-        onChangeText={setName}
+        value={title}
+        onChangeText={setTitle}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Link"
+        placeholder="Duration in minutes"
         placeholderTextColor={colors.textSecondary}
         keyboardType="numeric"
-        value={link}
-        onChangeText={setLink}
+        value={durationMinutes}
+        onChangeText={setDurationMinutes}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleNewWorkout}>
-        <Text style={styles.buttonText}>New Workout</Text>
+      <TextInput
+        style={[styles.input, styles.notesInput]}
+        placeholder="Notes"
+        placeholderTextColor={colors.textSecondary}
+        value={notes}
+        onChangeText={setNotes}
+        multiline
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleAddWorkout}>
+        <Text style={styles.buttonText}>Save Workout</Text>
       </TouchableOpacity>
     </View>
   );
@@ -74,12 +90,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 16,
   },
-  row: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  rowInput: {
-    flex: 1,
+  notesInput: {
+    minHeight: 100,
+    textAlignVertical: "top",
   },
   button: {
     backgroundColor: colors.primary,

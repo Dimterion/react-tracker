@@ -1,63 +1,58 @@
-import LinkItem from "@/features/workouts/components/WorkoutListItem";
-import {
-  clearAllLinks,
-  getLinks,
-  WorkoutSession,
-} from "@/features/workouts/storage/workouts";
-import { globalStyles } from "@/styles/global";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-export default function LinksScreen() {
-  const [links, setLinks] = useState<WorkoutSession[]>([]);
+import WorkoutListItem from "../../features/workouts/components/WorkoutListItem";
+import { clearAllWorkouts, getWorkouts } from "../../features/workouts/storage";
+import { WorkoutSession } from "../../features/workouts/types";
+import { globalStyles } from "../../styles/global";
 
-  const loadLinks = async () => {
-    const data = await getLinks();
-    setLinks(data);
+export default function WorkoutsScreen() {
+  const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
+
+  const loadWorkouts = async () => {
+    const data = await getWorkouts();
+    setWorkouts(data);
   };
 
   const handleClearAll = async () => {
-    await clearAllLinks();
-    loadLinks();
+    await clearAllWorkouts();
+    loadWorkouts();
   };
 
   useFocusEffect(
     useCallback(() => {
-      loadLinks();
+      loadWorkouts();
     }, []),
   );
 
   return (
     <ScrollView style={globalStyles.container}>
       <View style={globalStyles.header}>
-        <Text style={globalStyles.title}>Workouts</Text>
-        <TouchableOpacity onPress={handleClearAll}>
-          <Text style={styles.clearButton}>Clear All</Text>
+        <Text style={globalStyles.title}>Workout History</Text>
+
+        <TouchableOpacity onPress={() => router.push("/workouts/new")}>
+          <Text style={{ color: "#0ea5e9", fontSize: 16 }}>Add New</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ marginTop: 30 }}>
-        {links.length === 0 ? (
+
+      <View style={{ marginTop: 24 }}>
+        {workouts.length === 0 ? (
           <Text style={globalStyles.empty}>No workouts logged yet.</Text>
         ) : (
-          links.map((link) => (
-            <LinkItem
-              key={link.id}
-              id={link.id}
-              name={link.name}
-              link={link.reglink}
-              onDelete={loadLinks}
+          workouts.map((workout) => (
+            <WorkoutListItem
+              key={workout.id}
+              workout={workout}
+              onDelete={loadWorkouts}
             />
           ))
         )}
       </View>
+
+      <TouchableOpacity onPress={handleClearAll} style={{ marginTop: 20 }}>
+        <Text style={{ color: "red", fontSize: 16 }}>Clear All</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
-
-const styles = {
-  clearButton: {
-    color: "red",
-    fontSize: 16,
-  },
-};
