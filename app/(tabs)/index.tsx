@@ -1,41 +1,18 @@
-import CopyButton from "@/components/CopyButton";
-import Header from "@/components/Header";
-import LinkGrid from "@/components/LinkGrid";
-import RecentLinks from "@/components/RecentLinks";
-import ReminderToggle from "@/components/ReminderToggle";
-import ShareButton from "@/components/ShareButton";
-import { getLinks, WorkoutSession } from "@/features/workouts/storage/workouts";
-import { globalStyles } from "@/styles/global";
-import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
+import { globalStyles } from "../../styles/global";
 
 export default function HomeScreen() {
-  const [links, setLinks] = useState<WorkoutSession[]>([]);
-
-  const loadLinks = async () => {
-    const data = await getLinks();
-    setLinks(data);
-    console.log("Loaded links:", data);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      loadLinks();
-    }, []),
-  );
-
   return (
-    <ScrollView style={globalStyles.container}>
-      <View style={globalStyles.header}>
-        <Text style={globalStyles.title}>Workout Log</Text>
-        <ShareButton links={links} />
-      </View>
-      <Header />
-      <LinkGrid links={links} />
-      <CopyButton links={links} />
-      <ReminderToggle />
-      <RecentLinks links={links} onDelete={loadLinks} />
-    </ScrollView>
+    <View style={globalStyles.container}>
+      <Text style={globalStyles.title}>Workout Tracker</Text>
+      <Text style={globalStyles.subtitle}>Log sessions, review progress.</Text>
+
+      <TouchableOpacity onPress={() => router.push("/workouts/new")}>
+        <Text style={{ color: "#0ea5e9", marginTop: 20, fontSize: 16 }}>
+          Start a new workout
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }

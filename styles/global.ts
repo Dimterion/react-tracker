@@ -22,6 +22,9 @@ export const globalStyles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.text,
   },
+  subtitle: {
+    color: colors.textSecondary,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
