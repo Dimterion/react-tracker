@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -11,18 +12,46 @@ import {
 } from "react-native";
 
 import { addWorkout } from "../../features/workouts/storage";
-import { WorkoutCategory } from "../../features/workouts/types";
+import { WorkoutCategory, WorkoutSet } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
 
 export default function NewWorkoutScreen() {
   const [title, setTitle] = useState("");
   const [durationMinutes, setDurationMinutes] = useState("");
   const [notes, setNotes] = useState("");
+  const [exerciseName, setExerciseName] = useState("");
   const [category] = useState<WorkoutCategory>("strength");
 
-  const handleAddWorkout = async () => {
-    if (!title || !durationMinutes) {
-      Alert.alert("Error", "Please enter a workout title and duration.");
+  const [sets, setSets] = useState<WorkoutSet[]>([
+    { id: Date.now().toString(), reps: 10, weightKg: 20 },
+  ]);
+
+  const updateSet = (id: string, field: "reps" | "weightKg", value: string) => {
+    setSets((currentSets) =>
+      currentSets.map((set) =>
+        set.id === id
+          ? {
+              ...set,
+              [field]: value === "" ? undefined : Number(value),
+            }
+          : set,
+      ),
+    );
+  };
+
+  const addSetField = () => {
+    setSets((currentSets) => [
+      ...currentSets,
+      { id: `${Date.now()}-${currentSets.length}`, reps: 0, weightKg: 0 },
+    ]);
+  };
+
+  const handleSaveWorkout = async () => {
+    if (!title || !durationMinutes || !exerciseName) {
+      Alert.alert(
+        "Error",
+        "Please enter a workout title, duration, and exercise name.",
+      );
       return;
     }
 
@@ -32,11 +61,14 @@ export default function NewWorkoutScreen() {
       durationMinutes: Number(durationMinutes),
       completedAt: new Date().toISOString(),
       notes,
+      exercises: [
+        {
+          id: `exercise-${Date.now()}`,
+          name: exerciseName,
+          sets,
+        },
+      ],
     });
-
-    setTitle("");
-    setDurationMinutes("");
-    setNotes("");
 
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
@@ -45,7 +77,7 @@ export default function NewWorkoutScreen() {
   };
 
   return (
-    <View style={globalStyles.container}>
+    <ScrollView style={globalStyles.container}>
       <Text style={globalStyles.title}>New Workout</Text>
 
       <TextInput
@@ -66,6 +98,46 @@ export default function NewWorkoutScreen() {
       />
 
       <TextInput
+        style={styles.input}
+        placeholder="Exercise name"
+        placeholderTextColor={colors.textSecondary}
+        value={exerciseName}
+        onChangeText={setExerciseName}
+      />
+
+      <View style={{ marginTop: 20 }}>
+        <Text style={styles.sectionTitle}>Sets</Text>
+
+        {sets.map((set, index) => (
+          <View key={set.id} style={styles.setRow}>
+            <Text style={styles.setLabel}>Set {index + 1}</Text>
+
+            <TextInput
+              style={[styles.input, styles.setInput]}
+              placeholder="Reps"
+              placeholderTextColor={colors.textSecondary}
+              keyboardType="numeric"
+              value={set.reps?.toString() ?? ""}
+              onChangeText={(value) => updateSet(set.id, "reps", value)}
+            />
+
+            <TextInput
+              style={[styles.input, styles.setInput]}
+              placeholder="Kg"
+              placeholderTextColor={colors.textSecondary}
+              keyboardType="numeric"
+              value={set.weightKg?.toString() ?? ""}
+              onChangeText={(value) => updateSet(set.id, "weightKg", value)}
+            />
+          </View>
+        ))}
+
+        <TouchableOpacity onPress={addSetField}>
+          <Text style={styles.linkText}>+ Add set</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TextInput
         style={[styles.input, styles.notesInput]}
         placeholder="Notes"
         placeholderTextColor={colors.textSecondary}
@@ -74,10 +146,10 @@ export default function NewWorkoutScreen() {
         multiline
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleAddWorkout}>
+      <TouchableOpacity style={styles.button} onPress={handleSaveWorkout}>
         <Text style={styles.buttonText}>Save Workout</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -100,10 +172,30 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginTop: 24,
+    marginBottom: 32,
   },
   buttonText: {
     color: colors.background,
     fontSize: 16,
     fontWeight: "bold",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  setRow: {
+    marginTop: 12,
+  },
+  setLabel: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  setInput: {
+    marginTop: 8,
+  },
+  linkText: {
+    color: colors.primary,
+    fontSize: 16,
+    marginTop: 12,
   },
 });

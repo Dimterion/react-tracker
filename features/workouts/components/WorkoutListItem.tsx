@@ -1,4 +1,5 @@
 import * as Haptics from "expo-haptics";
+import { router } from "expo-router";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { deleteWorkout } from "../storage";
@@ -13,6 +14,10 @@ export default function WorkoutListItem({
   workout,
   onDelete,
 }: WorkoutListItemProps) {
+  const handlePress = () => {
+    router.push(`/workouts/${workout.id}`);
+  };
+
   const handleLongPress = () => {
     Alert.alert(
       "Delete workout",
@@ -35,10 +40,15 @@ export default function WorkoutListItem({
   };
 
   return (
-    <TouchableOpacity style={styles.container} onLongPress={handleLongPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handlePress}
+      onLongPress={handleLongPress}
+    >
       <Text style={styles.title}>{workout.title}</Text>
       <Text style={styles.meta}>
-        {workout.category} • {workout.durationMinutes} min
+        {workout.category} • {workout.durationMinutes} min •{" "}
+        {workout.exercises.length} exercises
       </Text>
     </TouchableOpacity>
   );
