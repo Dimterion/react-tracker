@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 import WorkoutListItem from "../../features/workouts/components/WorkoutListItem";
 import { clearAllWorkouts, getWorkouts } from "../../features/workouts/storage";
@@ -27,7 +27,7 @@ export default function WorkoutsScreen() {
   );
 
   return (
-    <ScrollView style={globalStyles.container}>
+    <View style={globalStyles.container}>
       <View style={globalStyles.header}>
         <Text style={globalStyles.title}>Workout History</Text>
 
@@ -36,23 +36,21 @@ export default function WorkoutsScreen() {
         </TouchableOpacity>
       </View>
 
-      <View style={{ marginTop: 24 }}>
-        {workouts.length === 0 ? (
-          <Text style={globalStyles.empty}>No workouts logged yet.</Text>
-        ) : (
-          workouts.map((workout) => (
-            <WorkoutListItem
-              key={workout.id}
-              workout={workout}
-              onDelete={loadWorkouts}
-            />
-          ))
+      <FlatList
+        data={workouts}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <WorkoutListItem workout={item} onDelete={loadWorkouts} />
         )}
-      </View>
+        ListEmptyComponent={
+          <Text style={globalStyles.empty}>No workouts logged yet.</Text>
+        }
+        contentContainerStyle={{ paddingTop: 24, paddingBottom: 24 }}
+      />
 
-      <TouchableOpacity onPress={handleClearAll} style={{ marginTop: 20 }}>
+      <TouchableOpacity onPress={handleClearAll} style={{ marginTop: 12 }}>
         <Text style={{ color: "red", fontSize: 16 }}>Clear All</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 }
