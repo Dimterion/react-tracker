@@ -26,6 +26,21 @@ export const addWorkout = async (
   return newWorkout;
 };
 
+export const getWorkoutById = async (id: string) => {
+  const workouts = await getWorkouts();
+  return workouts.find((workout) => workout.id === id) ?? null;
+};
+
+export const updateWorkout = async (updatedWorkout: WorkoutSession) => {
+  const workouts = await getWorkouts();
+
+  const updatedWorkouts = workouts.map((workout) =>
+    workout.id === updatedWorkout.id ? updatedWorkout : workout,
+  );
+
+  await AsyncStorage.setItem(WORKOUTS_KEY, JSON.stringify(updatedWorkouts));
+};
+
 export const deleteWorkout = async (id: string): Promise<void> => {
   const workouts = await getWorkouts();
   const filtered = workouts.filter((workout) => workout.id !== id);
