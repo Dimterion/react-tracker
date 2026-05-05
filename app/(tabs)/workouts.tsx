@@ -1,7 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-
 import WorkoutListItem from "../../features/workouts/components/WorkoutListItem";
 import { clearAllWorkouts, getWorkouts } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";

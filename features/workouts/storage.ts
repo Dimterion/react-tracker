@@ -8,6 +8,11 @@ export const getWorkouts = async (): Promise<WorkoutSession[]> => {
   return data ? JSON.parse(data) : [];
 };
 
+export const getWorkoutById = async (id: string) => {
+  const workouts = await getWorkouts();
+  return workouts.find((workout) => workout.id === id) ?? null;
+};
+
 export const addWorkout = async (
   workout: NewWorkoutInput,
 ): Promise<WorkoutSession> => {
@@ -24,11 +29,6 @@ export const addWorkout = async (
   );
 
   return newWorkout;
-};
-
-export const getWorkoutById = async (id: string) => {
-  const workouts = await getWorkouts();
-  return workouts.find((workout) => workout.id === id) ?? null;
 };
 
 export const updateWorkout = async (updatedWorkout: WorkoutSession) => {

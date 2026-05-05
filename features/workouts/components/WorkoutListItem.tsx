@@ -1,7 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
-
 import { deleteWorkout } from "../storage";
 import { WorkoutSession } from "../types";
 

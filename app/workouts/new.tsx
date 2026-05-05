@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import { addWorkout } from "../../features/workouts/storage";
 import { WorkoutCategory, WorkoutSet } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
@@ -182,6 +181,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
+    color: colors.textSecondary,
   },
   setRow: {
     marginTop: 12,
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
   setLabel: {
     fontSize: 14,
     marginBottom: 4,
+    color: colors.textSecondary,
   },
   setInput: {
     marginTop: 8,

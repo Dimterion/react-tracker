@@ -1,7 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-
 import { getWorkoutById } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
 import { globalStyles } from "../../styles/global";
