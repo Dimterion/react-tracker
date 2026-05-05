@@ -113,8 +113,10 @@ export default function NewWorkoutScreen() {
   };
 
   const handleSaveWorkout = async () => {
-    if (!title || !durationMinutes) {
-      Alert.alert("Error", "Please enter a workout title and duration.");
+    const parsedDuration = Number(durationMinutes);
+
+    if (!title.trim() || !durationMinutes || Number.isNaN(parsedDuration)) {
+      Alert.alert("Error", "Please enter a valid workout title and duration.");
       return;
     }
 
@@ -143,11 +145,11 @@ export default function NewWorkoutScreen() {
     }
 
     await addWorkout({
-      title,
+      title: title.trim(),
       category,
-      durationMinutes: Number(durationMinutes),
+      durationMinutes: parsedDuration,
       completedAt: new Date().toISOString(),
-      notes,
+      notes: notes.trim(),
       exercises: cleanedExercises,
     });
 
@@ -157,7 +159,10 @@ export default function NewWorkoutScreen() {
   };
 
   return (
-    <ScrollView style={globalStyles.container}>
+    <ScrollView
+      style={globalStyles.container}
+      contentContainerStyle={{ paddingBottom: 32 }}
+    >
       <Text style={globalStyles.title}>New Workout</Text>
 
       <TextInput
@@ -297,9 +302,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: colors.textSecondary,
-  },
-  setRow: {
-    marginTop: 12,
   },
   setLabel: {
     fontSize: 14,
