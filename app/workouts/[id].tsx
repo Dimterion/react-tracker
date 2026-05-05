@@ -35,7 +35,14 @@ export default function WorkoutDetailsScreen() {
       </Text>
 
       <View style={{ marginTop: 24 }}>
-        <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 12 }}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginBottom: 12,
+            color: "#a0a0b0",
+          }}
+        >
           Exercises
         </Text>
 
@@ -67,10 +74,19 @@ export default function WorkoutDetailsScreen() {
 
       {workout.notes ? (
         <View style={{ marginTop: 16 }}>
-          <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 8 }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginBottom: 8,
+              color: "#a0a0b0",
+            }}
+          >
             Notes
           </Text>
-          <Text style={{ fontSize: 16 }}>{workout.notes}</Text>
+          <Text style={{ fontSize: 16, color: "#a0a0b0" }}>
+            {workout.notes}
+          </Text>
         </View>
       ) : null}
     </ScrollView>

@@ -15,15 +15,18 @@ import { ExerciseEntry, WorkoutCategory } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
 
 export default function NewWorkoutScreen() {
+  const createId = () =>
+    `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+
   const [title, setTitle] = useState("");
   const [durationMinutes, setDurationMinutes] = useState("");
   const [notes, setNotes] = useState("");
   const [category] = useState<WorkoutCategory>("strength");
   const [exercises, setExercises] = useState<ExerciseEntry[]>([
     {
-      id: `exercise-${Date.now()}`,
+      id: `exercise-${createId()}`,
       name: "",
-      sets: [{ id: `set-${Date.now()}`, reps: 10, weightKg: 20 }],
+      sets: [{ id: `set-${createId()}`, reps: 10, weightKg: 20 }],
     },
   ]);
 
@@ -31,11 +34,9 @@ export default function NewWorkoutScreen() {
     setExercises((current) => [
       ...current,
       {
-        id: `exercise-${Date.now()}-${current.length}`,
+        id: `exercise-${createId()}`,
         name: "",
-        sets: [
-          { id: `set-${Date.now()}-${current.length}`, reps: 0, weightKg: 0 },
-        ],
+        sets: [{ id: `set-${createId()}`, reps: 0, weightKg: 0 }],
       },
     ]);
   };
@@ -63,7 +64,7 @@ export default function NewWorkoutScreen() {
               sets: [
                 ...exercise.sets,
                 {
-                  id: `set-${Date.now()}-${exercise.sets.length}`,
+                  id: `set-${createId()}`,
                   reps: 0,
                   weightKg: 0,
                 },
