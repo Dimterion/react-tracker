@@ -11,45 +11,133 @@ import {
   View,
 } from "react-native";
 import { addWorkout } from "../../features/workouts/storage";
-import { WorkoutCategory, WorkoutSet } from "../../features/workouts/types";
+import { ExerciseEntry, WorkoutCategory } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
 
 export default function NewWorkoutScreen() {
   const [title, setTitle] = useState("");
   const [durationMinutes, setDurationMinutes] = useState("");
   const [notes, setNotes] = useState("");
-  const [exerciseName, setExerciseName] = useState("");
   const [category] = useState<WorkoutCategory>("strength");
-
-  const [sets, setSets] = useState<WorkoutSet[]>([
-    { id: Date.now().toString(), reps: 10, weightKg: 20 },
+  const [exercises, setExercises] = useState<ExerciseEntry[]>([
+    {
+      id: `exercise-${Date.now()}`,
+      name: "",
+      sets: [{ id: `set-${Date.now()}`, reps: 10, weightKg: 20 }],
+    },
   ]);
 
-  const updateSet = (id: string, field: "reps" | "weightKg", value: string) => {
-    setSets((currentSets) =>
-      currentSets.map((set) =>
-        set.id === id
-          ? {
-              ...set,
-              [field]: value === "" ? undefined : Number(value),
-            }
-          : set,
+  const addExercise = () => {
+    setExercises((current) => [
+      ...current,
+      {
+        id: `exercise-${Date.now()}-${current.length}`,
+        name: "",
+        sets: [
+          { id: `set-${Date.now()}-${current.length}`, reps: 0, weightKg: 0 },
+        ],
+      },
+    ]);
+  };
+
+  const removeExercise = (exerciseId: string) => {
+    setExercises((current) =>
+      current.filter((exercise) => exercise.id !== exerciseId),
+    );
+  };
+
+  const updateExerciseName = (exerciseId: string, value: string) => {
+    setExercises((current) =>
+      current.map((exercise) =>
+        exercise.id === exerciseId ? { ...exercise, name: value } : exercise,
       ),
     );
   };
 
-  const addSetField = () => {
-    setSets((currentSets) => [
-      ...currentSets,
-      { id: `${Date.now()}-${currentSets.length}`, reps: 0, weightKg: 0 },
-    ]);
+  const addSetToExercise = (exerciseId: string) => {
+    setExercises((current) =>
+      current.map((exercise) =>
+        exercise.id === exerciseId
+          ? {
+              ...exercise,
+              sets: [
+                ...exercise.sets,
+                {
+                  id: `set-${Date.now()}-${exercise.sets.length}`,
+                  reps: 0,
+                  weightKg: 0,
+                },
+              ],
+            }
+          : exercise,
+      ),
+    );
+  };
+
+  const updateSetField = (
+    exerciseId: string,
+    setId: string,
+    field: "reps" | "weightKg",
+    value: string,
+  ) => {
+    setExercises((current) =>
+      current.map((exercise) =>
+        exercise.id === exerciseId
+          ? {
+              ...exercise,
+              sets: exercise.sets.map((set) =>
+                set.id === setId
+                  ? {
+                      ...set,
+                      [field]: value === "" ? undefined : Number(value),
+                    }
+                  : set,
+              ),
+            }
+          : exercise,
+      ),
+    );
+  };
+
+  const removeSetFromExercise = (exerciseId: string, setId: string) => {
+    setExercises((current) =>
+      current.map((exercise) =>
+        exercise.id === exerciseId
+          ? {
+              ...exercise,
+              sets: exercise.sets.filter((set) => set.id !== setId),
+            }
+          : exercise,
+      ),
+    );
   };
 
   const handleSaveWorkout = async () => {
-    if (!title || !durationMinutes || !exerciseName) {
+    if (!title || !durationMinutes) {
+      Alert.alert("Error", "Please enter a workout title and duration.");
+      return;
+    }
+
+    const cleanedExercises = exercises
+      .map((exercise) => ({
+        ...exercise,
+        name: exercise.name.trim(),
+        sets: exercise.sets.filter(
+          (set) =>
+            set.reps !== undefined ||
+            set.weightKg !== undefined ||
+            set.durationSeconds !== undefined ||
+            set.distanceKm !== undefined,
+        ),
+      }))
+      .filter(
+        (exercise) => exercise.name.length > 0 && exercise.sets.length > 0,
+      );
+
+    if (cleanedExercises.length === 0) {
       Alert.alert(
         "Error",
-        "Please enter a workout title, duration, and exercise name.",
+        "Please add at least one valid exercise with at least one set.",
       );
       return;
     }
@@ -60,17 +148,10 @@ export default function NewWorkoutScreen() {
       durationMinutes: Number(durationMinutes),
       completedAt: new Date().toISOString(),
       notes,
-      exercises: [
-        {
-          id: `exercise-${Date.now()}`,
-          name: exerciseName,
-          sets,
-        },
-      ],
+      exercises: cleanedExercises,
     });
 
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
     Alert.alert("Success", "Workout added successfully!");
     router.back();
   };
@@ -96,43 +177,77 @@ export default function NewWorkoutScreen() {
         onChangeText={setDurationMinutes}
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Exercise name"
-        placeholderTextColor={colors.textSecondary}
-        value={exerciseName}
-        onChangeText={setExerciseName}
-      />
-
       <View style={{ marginTop: 20 }}>
-        <Text style={styles.sectionTitle}>Sets</Text>
+        <Text style={styles.sectionTitle}>Exercises</Text>
 
-        {sets.map((set, index) => (
-          <View key={set.id} style={styles.setRow}>
-            <Text style={styles.setLabel}>Set {index + 1}</Text>
+        {exercises.map((exercise, exerciseIndex) => (
+          <View key={exercise.id} style={styles.exerciseCard}>
+            <View style={styles.exerciseHeader}>
+              <Text style={styles.sectionTitle}>
+                Exercise {exerciseIndex + 1}
+              </Text>
+
+              {exercises.length > 1 ? (
+                <TouchableOpacity onPress={() => removeExercise(exercise.id)}>
+                  <Text style={styles.removeText}>Remove exercise</Text>
+                </TouchableOpacity>
+              ) : null}
+            </View>
 
             <TextInput
-              style={[styles.input, styles.setInput]}
-              placeholder="Reps"
+              style={styles.input}
+              placeholder="Exercise name"
               placeholderTextColor={colors.textSecondary}
-              keyboardType="numeric"
-              value={set.reps?.toString() ?? ""}
-              onChangeText={(value) => updateSet(set.id, "reps", value)}
+              value={exercise.name}
+              onChangeText={(value) => updateExerciseName(exercise.id, value)}
             />
 
-            <TextInput
-              style={[styles.input, styles.setInput]}
-              placeholder="Kg"
-              placeholderTextColor={colors.textSecondary}
-              keyboardType="numeric"
-              value={set.weightKg?.toString() ?? ""}
-              onChangeText={(value) => updateSet(set.id, "weightKg", value)}
-            />
+            {exercise.sets.map((set, setIndex) => (
+              <View key={set.id} style={styles.setCard}>
+                <View style={styles.exerciseHeader}>
+                  <Text style={styles.setLabel}>Set {setIndex + 1}</Text>
+
+                  {exercise.sets.length > 1 ? (
+                    <TouchableOpacity
+                      onPress={() => removeSetFromExercise(exercise.id, set.id)}
+                    >
+                      <Text style={styles.removeText}>Remove set</Text>
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
+
+                <TextInput
+                  style={[styles.input, styles.setInput]}
+                  placeholder="Reps"
+                  placeholderTextColor={colors.textSecondary}
+                  keyboardType="numeric"
+                  value={set.reps?.toString() ?? ""}
+                  onChangeText={(value) =>
+                    updateSetField(exercise.id, set.id, "reps", value)
+                  }
+                />
+
+                <TextInput
+                  style={[styles.input, styles.setInput]}
+                  placeholder="Kg"
+                  placeholderTextColor={colors.textSecondary}
+                  keyboardType="numeric"
+                  value={set.weightKg?.toString() ?? ""}
+                  onChangeText={(value) =>
+                    updateSetField(exercise.id, set.id, "weightKg", value)
+                  }
+                />
+              </View>
+            ))}
+
+            <TouchableOpacity onPress={() => addSetToExercise(exercise.id)}>
+              <Text style={styles.linkText}>+ Add set</Text>
+            </TouchableOpacity>
           </View>
         ))}
 
-        <TouchableOpacity onPress={addSetField}>
-          <Text style={styles.linkText}>+ Add set</Text>
+        <TouchableOpacity onPress={addExercise}>
+          <Text style={styles.linkText}>+ Add exercise</Text>
         </TouchableOpacity>
       </View>
 
@@ -198,5 +313,26 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 16,
     marginTop: 12,
+  },
+  exerciseCard: {
+    backgroundColor: "#10182b",
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 20,
+  },
+  exerciseHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  setCard: {
+    marginTop: 12,
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: "#16213e",
+  },
+  removeText: {
+    color: "#ef4444",
+    fontSize: 14,
   },
 });
