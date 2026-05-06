@@ -1,9 +1,9 @@
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { getWorkoutById } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
-import { globalStyles } from "../../styles/global";
+import { colors, globalStyles } from "../../styles/global";
 
 export default function WorkoutDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -29,7 +29,15 @@ export default function WorkoutDetailsScreen() {
 
   return (
     <ScrollView style={globalStyles.container}>
-      <Text style={globalStyles.title}>{workout.title}</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.title}>{workout.title}</Text>
+
+        <TouchableOpacity
+          onPress={() => router.push(`/workouts/edit/${workout.id}`)}
+        >
+          <Text style={{ color: colors.primary, fontSize: 16 }}>Edit</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={globalStyles.subtitle}>
         {workout.category} • {workout.durationMinutes} min
       </Text>
