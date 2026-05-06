@@ -3,12 +3,17 @@ import { NewWorkoutInput, WorkoutSession } from "./types";
 
 const WORKOUTS_KEY = "workouts";
 
+const createId = () =>
+  `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+
 export const getWorkouts = async (): Promise<WorkoutSession[]> => {
   const data = await AsyncStorage.getItem(WORKOUTS_KEY);
   return data ? JSON.parse(data) : [];
 };
 
-export const getWorkoutById = async (id: string) => {
+export const getWorkoutById = async (
+  id: string,
+): Promise<WorkoutSession | null> => {
   const workouts = await getWorkouts();
   return workouts.find((workout) => workout.id === id) ?? null;
 };
@@ -20,7 +25,7 @@ export const addWorkout = async (
 
   const newWorkout: WorkoutSession = {
     ...workout,
-    id: Date.now().toString(),
+    id: createId(),
   };
 
   await AsyncStorage.setItem(
@@ -31,7 +36,9 @@ export const addWorkout = async (
   return newWorkout;
 };
 
-export const updateWorkout = async (updatedWorkout: WorkoutSession) => {
+export const updateWorkout = async (
+  updatedWorkout: WorkoutSession,
+): Promise<void> => {
   const workouts = await getWorkouts();
 
   const updatedWorkouts = workouts.map((workout) =>
