@@ -38,6 +38,7 @@ export default function WorkoutDetailsScreen() {
           <Text style={{ color: colors.primary, fontSize: 16 }}>Edit</Text>
         </TouchableOpacity>
       </View>
+
       <Text style={globalStyles.subtitle}>
         {workout.category} • {workout.durationMinutes} min
       </Text>

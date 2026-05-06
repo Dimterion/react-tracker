@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import {
   getWorkoutById,
   updateWorkout,
