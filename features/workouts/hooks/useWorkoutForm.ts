@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ExerciseEntry, WorkoutCategory, WorkoutSession } from "../types";
 
 export function useWorkoutForm() {
@@ -18,16 +18,16 @@ export function useWorkoutForm() {
     },
   ]);
 
-  const initializeForm = (workout: WorkoutSession) => {
+  const initializeForm = useCallback((workout: WorkoutSession) => {
     setTitle(workout.title);
     setDurationMinutes(workout.durationMinutes.toString());
     setNotes(workout.notes ?? "");
     setCategory(workout.category);
     setCompletedAt(workout.completedAt);
     setExercises(workout.exercises);
-  };
+  }, []);
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setTitle("");
     setDurationMinutes("");
     setNotes("");
@@ -40,7 +40,7 @@ export function useWorkoutForm() {
         sets: [{ id: `set-${createId()}`, reps: 10, weightKg: 20 }],
       },
     ]);
-  };
+  }, []);
 
   const addExercise = () => {
     setExercises((current) => [
@@ -121,7 +121,7 @@ export function useWorkoutForm() {
     );
   };
 
-  const getCleanedExercises = () => {
+  const getCleanedExercises = useCallback(() => {
     return exercises
       .map((exercise) => ({
         ...exercise,
@@ -137,7 +137,7 @@ export function useWorkoutForm() {
       .filter(
         (exercise) => exercise.name.length > 0 && exercise.sets.length > 0,
       );
-  };
+  }, [exercises]);
 
   return {
     title,

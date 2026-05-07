@@ -1,6 +1,6 @@
+import { useWorkoutForm } from "@/features/workouts/hooks/useWorkoutForm";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
-import { useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -11,107 +11,26 @@ import {
   View,
 } from "react-native";
 import { addWorkout } from "../../features/workouts/storage";
-import { ExerciseEntry, WorkoutCategory } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
 
 export default function NewWorkoutScreen() {
-  const createId = () =>
-    `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-
-  const [title, setTitle] = useState("");
-  const [durationMinutes, setDurationMinutes] = useState("");
-  const [notes, setNotes] = useState("");
-  const [category] = useState<WorkoutCategory>("strength");
-  const [exercises, setExercises] = useState<ExerciseEntry[]>([
-    {
-      id: `exercise-${createId()}`,
-      name: "",
-      sets: [{ id: `set-${createId()}`, reps: 10, weightKg: 20 }],
-    },
-  ]);
-
-  const addExercise = () => {
-    setExercises((current) => [
-      ...current,
-      {
-        id: `exercise-${createId()}`,
-        name: "",
-        sets: [{ id: `set-${createId()}`, reps: 0, weightKg: 0 }],
-      },
-    ]);
-  };
-
-  const removeExercise = (exerciseId: string) => {
-    setExercises((current) =>
-      current.filter((exercise) => exercise.id !== exerciseId),
-    );
-  };
-
-  const updateExerciseName = (exerciseId: string, value: string) => {
-    setExercises((current) =>
-      current.map((exercise) =>
-        exercise.id === exerciseId ? { ...exercise, name: value } : exercise,
-      ),
-    );
-  };
-
-  const addSetToExercise = (exerciseId: string) => {
-    setExercises((current) =>
-      current.map((exercise) =>
-        exercise.id === exerciseId
-          ? {
-              ...exercise,
-              sets: [
-                ...exercise.sets,
-                {
-                  id: `set-${createId()}`,
-                  reps: 0,
-                  weightKg: 0,
-                },
-              ],
-            }
-          : exercise,
-      ),
-    );
-  };
-
-  const updateSetField = (
-    exerciseId: string,
-    setId: string,
-    field: "reps" | "weightKg",
-    value: string,
-  ) => {
-    setExercises((current) =>
-      current.map((exercise) =>
-        exercise.id === exerciseId
-          ? {
-              ...exercise,
-              sets: exercise.sets.map((set) =>
-                set.id === setId
-                  ? {
-                      ...set,
-                      [field]: value === "" ? undefined : Number(value),
-                    }
-                  : set,
-              ),
-            }
-          : exercise,
-      ),
-    );
-  };
-
-  const removeSetFromExercise = (exerciseId: string, setId: string) => {
-    setExercises((current) =>
-      current.map((exercise) =>
-        exercise.id === exerciseId
-          ? {
-              ...exercise,
-              sets: exercise.sets.filter((set) => set.id !== setId),
-            }
-          : exercise,
-      ),
-    );
-  };
+  const {
+    title,
+    setTitle,
+    durationMinutes,
+    setDurationMinutes,
+    notes,
+    setNotes,
+    category,
+    exercises,
+    addExercise,
+    removeExercise,
+    updateExerciseName,
+    addSetToExercise,
+    updateSetField,
+    removeSetFromExercise,
+    getCleanedExercises,
+  } = useWorkoutForm();
 
   const handleSaveWorkout = async () => {
     const parsedDuration = Number(durationMinutes);
@@ -121,21 +40,7 @@ export default function NewWorkoutScreen() {
       return;
     }
 
-    const cleanedExercises = exercises
-      .map((exercise) => ({
-        ...exercise,
-        name: exercise.name.trim(),
-        sets: exercise.sets.filter(
-          (set) =>
-            set.reps !== undefined ||
-            set.weightKg !== undefined ||
-            set.durationSeconds !== undefined ||
-            set.distanceKm !== undefined,
-        ),
-      }))
-      .filter(
-        (exercise) => exercise.name.length > 0 && exercise.sets.length > 0,
-      );
+    const cleanedExercises = getCleanedExercises();
 
     if (cleanedExercises.length === 0) {
       Alert.alert(
