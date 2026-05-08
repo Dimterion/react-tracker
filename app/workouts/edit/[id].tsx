@@ -2,7 +2,7 @@ import { useWorkoutForm } from "@/features/workouts/hooks/useWorkoutForm";
 import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import WorkoutForm from "../../../features/workouts/components/WorkoutForm";
 import {
   getWorkoutById,
@@ -100,7 +100,10 @@ export default function EditWorkoutScreen() {
   }
 
   return (
-    <>
+    <ScrollView
+      style={globalStyles.container}
+      contentContainerStyle={{ paddingBottom: 32 }}
+    >
       <Text style={globalStyles.title}>Edit Workout</Text>
       <WorkoutForm
         title={title}
@@ -119,6 +122,6 @@ export default function EditWorkoutScreen() {
         onSubmit={handleUpdateWorkout}
         submitLabel="Update Workout"
       />
-    </>
+    </ScrollView>
   );
 }

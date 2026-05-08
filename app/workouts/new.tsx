@@ -1,7 +1,7 @@
 import { useWorkoutForm } from "@/features/workouts/hooks/useWorkoutForm";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
-import { Alert, Text } from "react-native";
+import { Alert, ScrollView, Text } from "react-native";
 import WorkoutForm from "../../features/workouts/components/WorkoutForm";
 import { addWorkout } from "../../features/workouts/storage";
 import { globalStyles } from "../../styles/global";
@@ -58,7 +58,10 @@ export default function NewWorkoutScreen() {
   };
 
   return (
-    <>
+    <ScrollView
+      style={globalStyles.container}
+      contentContainerStyle={{ paddingBottom: 32 }}
+    >
       <Text style={globalStyles.title}>New Workout</Text>
       <WorkoutForm
         title={title}
@@ -77,6 +80,6 @@ export default function NewWorkoutScreen() {
         onSubmit={handleSaveWorkout}
         submitLabel="Save Workout"
       />
-    </>
+    </ScrollView>
   );
 }

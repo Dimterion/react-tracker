@@ -1,12 +1,11 @@
 import {
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors, globalStyles } from "../../../styles/global";
+import { colors } from "../../../styles/global";
 import { ExerciseEntry } from "../types";
 
 type WorkoutFormProps = {
@@ -50,10 +49,7 @@ export default function WorkoutForm({
   submitLabel,
 }: WorkoutFormProps) {
   return (
-    <ScrollView
-      style={globalStyles.container}
-      contentContainerStyle={{ paddingBottom: 32 }}
-    >
+    <>
       <TextInput
         style={styles.input}
         placeholder="Workout title"
@@ -157,7 +153,7 @@ export default function WorkoutForm({
       <TouchableOpacity style={styles.button} onPress={onSubmit}>
         <Text style={styles.buttonText}>{submitLabel}</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </>
   );
 }
 
