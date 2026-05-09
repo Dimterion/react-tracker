@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { getWorkoutById } from "../../features/workouts/storage";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { deleteWorkout, getWorkoutById } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
 
@@ -19,6 +19,30 @@ export default function WorkoutDetailsScreen() {
     loadWorkout();
   }, [id]);
 
+  const handleDeleteWorkout = () => {
+    if (!workout) return;
+
+    Alert.alert(
+      "Delete workout",
+      `Are you sure you want to delete "${workout.title}"? This action cannot be undone.`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            await deleteWorkout(workout.id);
+            router.back();
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  };
+
   if (!workout) {
     return (
       <View style={globalStyles.container}>
@@ -32,11 +56,17 @@ export default function WorkoutDetailsScreen() {
       <View style={globalStyles.header}>
         <Text style={globalStyles.title}>{workout.title}</Text>
 
-        <TouchableOpacity
-          onPress={() => router.push(`/workouts/edit/${workout.id}`)}
-        >
-          <Text style={{ color: colors.primary, fontSize: 16 }}>Edit</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", gap: 16 }}>
+          <TouchableOpacity
+            onPress={() => router.push(`/workouts/edit/${workout.id}`)}
+          >
+            <Text style={{ color: colors.primary, fontSize: 16 }}>Edit</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={handleDeleteWorkout}>
+            <Text style={{ color: "#ef4444", fontSize: 16 }}>Delete</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <Text style={globalStyles.subtitle}>
