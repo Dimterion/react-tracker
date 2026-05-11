@@ -15,6 +15,7 @@ export default function NewWorkoutScreen() {
     notes,
     setNotes,
     category,
+    setCategory,
     exercises,
     addExercise,
     removeExercise,
@@ -68,6 +69,8 @@ export default function NewWorkoutScreen() {
         onTitleChange={setTitle}
         durationMinutes={durationMinutes}
         onDurationChange={setDurationMinutes}
+        category={category}
+        onCategoryChange={setCategory}
         notes={notes}
         onNotesChange={setNotes}
         exercises={exercises}

@@ -22,6 +22,7 @@ export default function EditWorkoutScreen() {
     notes,
     setNotes,
     category,
+    setCategory,
     completedAt,
     exercises,
     initializeForm,
@@ -110,6 +111,8 @@ export default function EditWorkoutScreen() {
         onTitleChange={setTitle}
         durationMinutes={durationMinutes}
         onDurationChange={setDurationMinutes}
+        category={category}
+        onCategoryChange={setCategory}
         notes={notes}
         onNotesChange={setNotes}
         exercises={exercises}

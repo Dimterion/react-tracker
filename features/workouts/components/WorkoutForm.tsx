@@ -1,18 +1,23 @@
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors } from "../../../styles/global";
-import { ExerciseEntry } from "../types";
+import { colors, globalStyles } from "../../../styles/global";
+import { ExerciseEntry, WorkoutCategory } from "../types";
+
+const CATEGORIES: WorkoutCategory[] = ["strength", "cardio", "mobility"];
 
 type WorkoutFormProps = {
   title: string;
   onTitleChange: (value: string) => void;
   durationMinutes: string;
   onDurationChange: (value: string) => void;
+  category: WorkoutCategory;
+  onCategoryChange: (value: WorkoutCategory) => void;
   notes: string;
   onNotesChange: (value: string) => void;
   exercises: ExerciseEntry[];
@@ -36,6 +41,8 @@ export default function WorkoutForm({
   onTitleChange,
   durationMinutes,
   onDurationChange,
+  category,
+  onCategoryChange,
   notes,
   onNotesChange,
   exercises,
@@ -49,7 +56,10 @@ export default function WorkoutForm({
   submitLabel,
 }: WorkoutFormProps) {
   return (
-    <>
+    <ScrollView
+      style={globalStyles.container}
+      contentContainerStyle={{ paddingBottom: 32 }}
+    >
       <TextInput
         style={styles.input}
         placeholder="Workout title"
@@ -66,6 +76,36 @@ export default function WorkoutForm({
         value={durationMinutes}
         onChangeText={onDurationChange}
       />
+
+      <View style={{ marginTop: 20 }}>
+        <Text style={styles.sectionTitle}>Category</Text>
+
+        <View style={styles.categoryRow}>
+          {CATEGORIES.map((cat) => {
+            const isSelected = category === cat;
+
+            return (
+              <TouchableOpacity
+                key={cat}
+                style={[
+                  styles.categoryChip,
+                  isSelected && styles.categoryChipSelected,
+                ]}
+                onPress={() => onCategoryChange(cat)}
+              >
+                <Text
+                  style={[
+                    styles.categoryChipText,
+                    isSelected && styles.categoryChipTextSelected,
+                  ]}
+                >
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
 
       <View style={{ marginTop: 20 }}>
         <Text style={styles.sectionTitle}>Exercises</Text>
@@ -153,7 +193,7 @@ export default function WorkoutForm({
       <TouchableOpacity style={styles.button} onPress={onSubmit}>
         <Text style={styles.buttonText}>{submitLabel}</Text>
       </TouchableOpacity>
-    </>
+    </ScrollView>
   );
 }
 
@@ -187,6 +227,32 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: colors.textSecondary,
+  },
+  categoryRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginTop: 12,
+  },
+  categoryChip: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.surface,
+  },
+  categoryChipSelected: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  categoryChipText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  categoryChipTextSelected: {
+    color: colors.background,
   },
   setLabel: {
     fontSize: 14,
