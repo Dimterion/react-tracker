@@ -1,6 +1,7 @@
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { formatWorkoutDate } from "../../../utils/date";
 import { deleteWorkout } from "../storage";
 import { WorkoutSession } from "../types";
 
@@ -49,6 +50,7 @@ export default function WorkoutListItem({
         {workout.category} • {workout.durationMinutes} min •{" "}
         {workout.exercises.length} exercises
       </Text>
+      <Text style={styles.date}>{formatWorkoutDate(workout.completedAt)}</Text>
     </TouchableOpacity>
   );
 }
@@ -66,6 +68,11 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
   meta: {
+    fontSize: 13,
+    color: "#a0a0b0",
+    marginTop: 4,
+  },
+  date: {
     fontSize: 13,
     color: "#a0a0b0",
     marginTop: 4,
