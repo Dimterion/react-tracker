@@ -1,5 +1,12 @@
 export function formatWorkoutDate(isoString: string): string {
+  if (!isoString) return "Unknown date";
+
   const date = new Date(isoString);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown date";
+  }
+
   const now = new Date();
 
   const startOfToday = new Date(
