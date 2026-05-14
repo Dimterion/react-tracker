@@ -1,3 +1,4 @@
+import { getStartOfWeek } from "@/utils/date";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -10,16 +11,6 @@ import {
 import { getWorkouts } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
-
-function getStartOfWeek(): Date {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-  const monday = new Date(now);
-  monday.setDate(diff);
-  monday.setHours(0, 0, 0, 0);
-  return monday;
-}
 
 export default function HomeScreen() {
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);

@@ -1,18 +1,10 @@
+import { getStartOfWeek } from "@/utils/date";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { getWorkouts } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
-
-function getStartOfWeek(): Date {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-  const monday = new Date(now.setDate(diff));
-  monday.setHours(0, 0, 0, 0);
-  return monday;
-}
 
 function getTopCategory(workouts: WorkoutSession[]): string {
   const counts: Record<string, number> = {};
