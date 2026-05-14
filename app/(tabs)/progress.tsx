@@ -78,28 +78,38 @@ export default function ProgressScreen() {
           <Text style={styles.sectionLabel}>All Time</Text>
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.total}</Text>
-              <Text style={styles.statLabel}>Workouts</Text>
+              <View style={styles.statCardInner}>
+                <Text style={styles.statValue}>{stats.total}</Text>
+                <Text style={styles.statLabel}>Workouts</Text>
+              </View>
             </View>
             <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.totalMinutes}</Text>
-              <Text style={styles.statLabel}>Minutes</Text>
+              <View style={styles.statCardInner}>
+                <Text style={styles.statValue}>{stats.totalMinutes}</Text>
+                <Text style={styles.statLabel}>Minutes</Text>
+              </View>
             </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.topCategory}</Text>
-              <Text style={styles.statLabel}>Top Category</Text>
+            <View style={[styles.statCard, { width: "100%" }]}>
+              <View style={styles.statCardInner}>
+                <Text style={styles.statValue}>{stats.topCategory}</Text>
+                <Text style={styles.statLabel}>Top Category</Text>
+              </View>
             </View>
           </View>
 
           <Text style={styles.sectionLabel}>This Week</Text>
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.thisWeekCount}</Text>
-              <Text style={styles.statLabel}>Workouts</Text>
+              <View style={styles.statCardInner}>
+                <Text style={styles.statValue}>{stats.thisWeekCount}</Text>
+                <Text style={styles.statLabel}>Workouts</Text>
+              </View>
             </View>
             <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.thisWeekMinutes}</Text>
-              <Text style={styles.statLabel}>Minutes</Text>
+              <View style={styles.statCardInner}>
+                <Text style={styles.statValue}>{stats.thisWeekMinutes}</Text>
+                <Text style={styles.statLabel}>Minutes</Text>
+              </View>
             </View>
           </View>
 
@@ -107,10 +117,12 @@ export default function ProgressScreen() {
           <View style={styles.statsGrid}>
             {Object.entries(stats.categoryCounts).map(([cat, count]) => (
               <View key={cat} style={styles.statCard}>
-                <Text style={styles.statValue}>{count}</Text>
-                <Text style={styles.statLabel}>
-                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                </Text>
+                <View style={styles.statCardInner}>
+                  <Text style={styles.statValue}>{count}</Text>
+                  <Text style={styles.statLabel}>
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  </Text>
+                </View>
               </View>
             ))}
           </View>
@@ -133,27 +145,33 @@ const styles = StyleSheet.create({
   statsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    marginHorizontal: -6,
   },
   statCard: {
-    flex: 1,
-    minWidth: "45%",
+    width: "50%",
+    paddingHorizontal: 6,
+    marginBottom: 12,
+  },
+  statCardInner: {
     backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 20,
     alignItems: "center",
     justifyContent: "center",
-    gap: 6,
+    minHeight: 110,
   },
   statValue: {
     fontSize: 28,
     fontWeight: "700",
     color: colors.text,
+    textAlign: "center",
   },
   statLabel: {
     fontSize: 13,
     color: colors.textSecondary,
     fontWeight: "500",
+    marginTop: 6,
+    textAlign: "center",
   },
   emptyState: {
     marginTop: 48,
