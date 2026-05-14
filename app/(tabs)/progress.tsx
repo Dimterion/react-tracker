@@ -64,7 +64,10 @@ export default function ProgressScreen() {
   const hasData = workouts.length > 0;
 
   return (
-    <ScrollView style={globalStyles.container}>
+    <ScrollView
+      style={globalStyles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
       <Text style={globalStyles.title}>Progress</Text>
 
       {!hasData ? (
@@ -91,7 +94,9 @@ export default function ProgressScreen() {
             </View>
             <View style={[styles.statCard, { width: "100%" }]}>
               <View style={styles.statCardInner}>
-                <Text style={styles.statValue}>{stats.topCategory}</Text>
+                <Text style={[styles.statValue, styles.topCategoryValue]}>
+                  {stats.topCategory}
+                </Text>
                 <Text style={styles.statLabel}>Top Category</Text>
               </View>
             </View>
@@ -133,6 +138,9 @@ export default function ProgressScreen() {
 }
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    paddingBottom: 24,
+  },
   sectionLabel: {
     fontSize: 14,
     fontWeight: "700",
@@ -176,5 +184,8 @@ const styles = StyleSheet.create({
   emptyState: {
     marginTop: 48,
     alignItems: "center",
+  },
+  topCategoryValue: {
+    fontSize: 24,
   },
 });
