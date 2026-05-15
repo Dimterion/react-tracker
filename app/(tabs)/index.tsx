@@ -1,4 +1,4 @@
-import { getStartOfWeek } from "@/utils/date";
+import { formatWorkoutDate, getStartOfWeek } from "@/utils/date";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -79,6 +79,20 @@ export default function HomeScreen() {
         )}
       </View>
 
+      <TouchableOpacity
+        style={styles.primaryButton}
+        onPress={() => router.push("/workouts/new")}
+      >
+        <Text style={styles.primaryButtonText}>+ Log a Workout</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        onPress={() => router.push("/workouts")}
+      >
+        <Text style={styles.secondaryButtonText}>View History</Text>
+      </TouchableOpacity>
+
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Recent Workouts</Text>
         {workouts.length > 0 ? (
@@ -97,7 +111,8 @@ export default function HomeScreen() {
           >
             <Text style={styles.recentTitle}>{workout.title}</Text>
             <Text style={styles.recentMeta}>
-              {workout.category} • {workout.durationMinutes} min
+              {workout.category} • {workout.durationMinutes} min •{" "}
+              {formatWorkoutDate(workout.completedAt)}
             </Text>
           </TouchableOpacity>
         ))
@@ -106,20 +121,6 @@ export default function HomeScreen() {
           Your latest workouts will appear here.
         </Text>
       )}
-
-      <TouchableOpacity
-        style={styles.primaryButton}
-        onPress={() => router.push("/workouts/new")}
-      >
-        <Text style={styles.primaryButtonText}>+ Log a Workout</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.secondaryButton}
-        onPress={() => router.push("/workouts")}
-      >
-        <Text style={styles.secondaryButtonText}>View History</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 }
