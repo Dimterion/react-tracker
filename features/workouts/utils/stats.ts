@@ -1,6 +1,16 @@
 import { getStartOfWeek } from "@/utils/date";
 import { WorkoutCategory, WorkoutSession } from "../types";
 
+function getWeekKey(dateInput: string): string {
+  const date = new Date(dateInput);
+  const start = new Date(date);
+  const day = start.getDay();
+  const diff = start.getDate() - day + (day === 0 ? -6 : 1);
+  start.setDate(diff);
+  start.setHours(0, 0, 0, 0);
+  return start.toISOString();
+}
+
 export function getTopCategory(workouts: WorkoutSession[]): string {
   const counts: Record<string, number> = {};
 
@@ -45,6 +55,26 @@ export function getWeeklyStats(workouts: WorkoutSession[]) {
   };
 }
 
+export function getWeeklyWorkoutStreak(workouts: WorkoutSession[]): number {
+  if (workouts.length === 0) return 0;
+
+  const workoutWeeks = new Set(
+    workouts.map((workout) => getWeekKey(workout.completedAt)),
+  );
+
+  let streak = 0;
+  let currentWeek = getStartOfWeek();
+
+  while (workoutWeeks.has(currentWeek.toISOString())) {
+    streak += 1;
+    currentWeek = new Date(currentWeek);
+    currentWeek.setDate(currentWeek.getDate() - 7);
+    currentWeek.setHours(0, 0, 0, 0);
+  }
+
+  return streak;
+}
+
 export function getProgressStats(workouts: WorkoutSession[]) {
   const weekStart = getStartOfWeek();
 
@@ -79,6 +109,7 @@ export function getProgressStats(workouts: WorkoutSession[]) {
     thisWeekCount: thisWeek.length,
     thisWeekMinutes,
     topCategory: getTopCategory(workouts),
+    currentWeeklyStreak: getWeeklyWorkoutStreak(workouts),
     categoryCounts,
   };
 }

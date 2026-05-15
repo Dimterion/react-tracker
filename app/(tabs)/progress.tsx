@@ -70,10 +70,24 @@ export default function ProgressScreen() {
                 <Text style={styles.statLabel}>Workouts</Text>
               </View>
             </View>
+
             <View style={styles.statCard}>
               <View style={styles.statCardInner}>
                 <Text style={styles.statValue}>{stats.thisWeekMinutes}</Text>
                 <Text style={styles.statLabel}>Minutes</Text>
+              </View>
+            </View>
+
+            <View style={[styles.statCard, { width: "100%" }]}>
+              <View style={styles.statCardInner}>
+                <Text style={styles.statValue}>
+                  {stats.currentWeeklyStreak}
+                </Text>
+                <Text style={styles.statLabel}>
+                  {stats.currentWeeklyStreak === 1
+                    ? "Active Week Streak"
+                    : "Active Weeks Streak"}
+                </Text>
               </View>
             </View>
           </View>
