@@ -36,8 +36,20 @@ export default function HomeScreen() {
 
   const hasActivity = weekStats.count > 0;
 
+  const recentWorkouts = useMemo(() => {
+    return [...workouts]
+      .sort(
+        (a, b) =>
+          new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
+      )
+      .slice(0, 3);
+  }, [workouts]);
+
   return (
-    <ScrollView style={globalStyles.container}>
+    <ScrollView
+      style={globalStyles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
       <Text style={globalStyles.title}>Workout Tracker</Text>
       <Text style={[globalStyles.subtitle, { marginBottom: 32 }]}>
         Track your workouts and monitor your progress.
@@ -67,6 +79,34 @@ export default function HomeScreen() {
         )}
       </View>
 
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Recent Workouts</Text>
+        {workouts.length > 0 ? (
+          <TouchableOpacity onPress={() => router.push("/workouts")}>
+            <Text style={styles.seeAllText}>See all</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
+
+      {recentWorkouts.length > 0 ? (
+        recentWorkouts.map((workout) => (
+          <TouchableOpacity
+            key={workout.id}
+            style={styles.recentCard}
+            onPress={() => router.push(`/workouts/${workout.id}`)}
+          >
+            <Text style={styles.recentTitle}>{workout.title}</Text>
+            <Text style={styles.recentMeta}>
+              {workout.category} • {workout.durationMinutes} min
+            </Text>
+          </TouchableOpacity>
+        ))
+      ) : (
+        <Text style={styles.recentEmpty}>
+          Your latest workouts will appear here.
+        </Text>
+      )}
+
       <TouchableOpacity
         style={styles.primaryButton}
         onPress={() => router.push("/workouts/new")}
@@ -85,6 +125,9 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    paddingBottom: 24,
+  },
   snapshotCard: {
     backgroundColor: colors.surface,
     borderRadius: 14,
@@ -149,5 +192,43 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 16,
     fontWeight: "600",
+  },
+  sectionHeader: {
+    marginTop: 28,
+    marginBottom: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: colors.text,
+  },
+  seeAllText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.primary,
+  },
+  recentCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 10,
+  },
+  recentTitle: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: colors.text,
+  },
+  recentMeta: {
+    fontSize: 13,
+    color: colors.textSecondary,
+    marginTop: 4,
+    textTransform: "capitalize",
+  },
+  recentEmpty: {
+    fontSize: 14,
+    color: colors.textSecondary,
   },
 });
