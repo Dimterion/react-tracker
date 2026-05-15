@@ -1,4 +1,8 @@
-import { formatWorkoutDate, getStartOfWeek } from "@/utils/date";
+import {
+  getRecentWorkouts,
+  getWeeklyStats,
+} from "@/features/workouts/utils/stats";
+import { formatWorkoutDate } from "@/utils/date";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -25,25 +29,10 @@ export default function HomeScreen() {
     }, []),
   );
 
-  const weekStats = useMemo(() => {
-    const weekStart = getStartOfWeek();
-    const thisWeek = workouts.filter(
-      (w) => new Date(w.completedAt) >= weekStart,
-    );
-    const minutes = thisWeek.reduce((sum, w) => sum + w.durationMinutes, 0);
-    return { count: thisWeek.length, minutes };
-  }, [workouts]);
+  const weekStats = useMemo(() => getWeeklyStats(workouts), [workouts]);
+  const recentWorkouts = useMemo(() => getRecentWorkouts(workouts), [workouts]);
 
   const hasActivity = weekStats.count > 0;
-
-  const recentWorkouts = useMemo(() => {
-    return [...workouts]
-      .sort(
-        (a, b) =>
-          new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
-      )
-      .slice(0, 3);
-  }, [workouts]);
 
   return (
     <ScrollView

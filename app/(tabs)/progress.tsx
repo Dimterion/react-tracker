@@ -1,23 +1,10 @@
-import { getStartOfWeek } from "@/utils/date";
+import { getProgressStats } from "@/features/workouts/utils/stats";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { getWorkouts } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
-
-function getTopCategory(workouts: WorkoutSession[]): string {
-  const counts: Record<string, number> = {};
-
-  for (const w of workouts) {
-    counts[w.category] = (counts[w.category] ?? 0) + 1;
-  }
-
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  return sorted.length > 0
-    ? sorted[0][0].charAt(0).toUpperCase() + sorted[0][0].slice(1)
-    : "—";
-}
 
 export default function ProgressScreen() {
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
@@ -32,34 +19,7 @@ export default function ProgressScreen() {
     }, []),
   );
 
-  const stats = useMemo(() => {
-    const weekStart = getStartOfWeek();
-
-    const thisWeek = workouts.filter(
-      (w) => new Date(w.completedAt) >= weekStart,
-    );
-
-    const totalMinutes = workouts.reduce(
-      (sum, w) => sum + w.durationMinutes,
-      0,
-    );
-
-    const weekMinutes = thisWeek.reduce((sum, w) => sum + w.durationMinutes, 0);
-
-    const categoryCounts: Record<string, number> = {};
-    for (const w of workouts) {
-      categoryCounts[w.category] = (categoryCounts[w.category] ?? 0) + 1;
-    }
-
-    return {
-      total: workouts.length,
-      totalMinutes,
-      thisWeekCount: thisWeek.length,
-      thisWeekMinutes: weekMinutes,
-      topCategory: getTopCategory(workouts),
-      categoryCounts,
-    };
-  }, [workouts]);
+  const stats = useMemo(() => getProgressStats(workouts), [workouts]);
 
   const hasData = workouts.length > 0;
 
