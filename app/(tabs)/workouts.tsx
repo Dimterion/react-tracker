@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import ScreenLoader from "../../components/ScreenLoader";
 import WorkoutListItem from "../../features/workouts/components/WorkoutListItem";
 import { clearAllWorkouts, getWorkouts } from "../../features/workouts/storage";
 import { WorkoutCategory, WorkoutSession } from "../../features/workouts/types";
@@ -23,12 +24,20 @@ const FILTER_OPTIONS: FilterOption[] = [
 ];
 
 export default function WorkoutsScreen() {
+  const [isLoading, setIsLoading] = useState(true);
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>("all");
 
   const loadWorkouts = async () => {
-    const data = await getWorkouts();
-    setWorkouts(data);
+    setIsLoading(true);
+    try {
+      const data = await getWorkouts();
+      setWorkouts(data);
+    } catch (error) {
+      console.error("Failed to load workouts:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleClearAll = () => {
@@ -69,6 +78,17 @@ export default function WorkoutsScreen() {
 
   const hasWorkouts = workouts.length > 0;
   const isFilteredEmpty = hasWorkouts && filteredWorkouts.length === 0;
+
+  if (isLoading) {
+    return (
+      <View style={globalStyles.container}>
+        <View style={globalStyles.header}>
+          <Text style={globalStyles.title}>Workout History</Text>
+        </View>
+        <ScreenLoader message="Loading..." />
+      </View>
+    );
+  }
 
   return (
     <View style={globalStyles.container}>
