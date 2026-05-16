@@ -13,19 +13,29 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import ScreenLoader from "../../components/ScreenLoader";
 import { getWorkouts } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
 
 export default function HomeScreen() {
+  const [isLoading, setIsLoading] = useState(true);
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
 
   useFocusEffect(
     useCallback(() => {
       const load = async () => {
-        const data = await getWorkouts();
-        setWorkouts(data);
+        setIsLoading(true);
+        try {
+          const data = await getWorkouts();
+          setWorkouts(data);
+        } catch (error) {
+          console.error("Failed to load workouts:", error);
+        } finally {
+          setIsLoading(false);
+        }
       };
+
       load();
     }, []),
   );
@@ -40,6 +50,18 @@ export default function HomeScreen() {
   );
 
   const hasActivity = weekStats.count > 0;
+
+  if (isLoading) {
+    return (
+      <ScrollView
+        style={globalStyles.container}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <Text style={globalStyles.title}>Workout Tracker</Text>
+        <ScreenLoader message="Loading..." />
+      </ScrollView>
+    );
+  }
 
   return (
     <ScrollView
