@@ -1,6 +1,7 @@
 import {
   getRecentWorkouts,
   getWeeklyStats,
+  getWeeklyWorkoutStreak,
 } from "@/features/workouts/utils/stats";
 import { formatWorkoutDate } from "@/utils/date";
 import { router, useFocusEffect } from "expo-router";
@@ -30,7 +31,13 @@ export default function HomeScreen() {
   );
 
   const weekStats = useMemo(() => getWeeklyStats(workouts), [workouts]);
+
   const recentWorkouts = useMemo(() => getRecentWorkouts(workouts), [workouts]);
+
+  const weeklyStreak = useMemo(
+    () => getWeeklyWorkoutStreak(workouts),
+    [workouts],
+  );
 
   const hasActivity = weekStats.count > 0;
 
@@ -64,6 +71,17 @@ export default function HomeScreen() {
         ) : (
           <Text style={styles.snapshotEmpty}>
             No workouts logged yet this week.
+          </Text>
+        )}
+
+        {weeklyStreak > 0 ? (
+          <Text style={styles.streakText}>
+            Current streak: {weeklyStreak} active{" "}
+            {weeklyStreak === 1 ? "week" : "weeks"}
+          </Text>
+        ) : (
+          <Text style={styles.streakTextMuted}>
+            Start a workout this week to begin your streak.
           </Text>
         )}
       </View>
@@ -220,5 +238,18 @@ const styles = StyleSheet.create({
   recentEmpty: {
     fontSize: 14,
     color: colors.textSecondary,
+  },
+  streakText: {
+    marginTop: 16,
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.primary,
+    textAlign: "center",
+  },
+  streakTextMuted: {
+    marginTop: 16,
+    fontSize: 14,
+    color: colors.textSecondary,
+    textAlign: "center",
   },
 });
