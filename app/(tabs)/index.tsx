@@ -1,3 +1,4 @@
+import ScreenError from "@/components/ScreenError";
 import {
   getRecentWorkouts,
   getWeeklyStats,
@@ -20,30 +21,32 @@ import { colors, globalStyles } from "../../styles/global";
 
 export default function HomeScreen() {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
+
+  const loadWorkouts = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data = await getWorkouts();
+      setWorkouts(data);
+    } catch (error) {
+      console.error("Failed to load workouts:", error);
+      setError("Unable to load data.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      const load = async () => {
-        setIsLoading(true);
-        try {
-          const data = await getWorkouts();
-          setWorkouts(data);
-        } catch (error) {
-          console.error("Failed to load workouts:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      load();
-    }, []),
+      loadWorkouts();
+    }, [loadWorkouts]),
   );
 
   const weekStats = useMemo(() => getWeeklyStats(workouts), [workouts]);
-
   const recentWorkouts = useMemo(() => getRecentWorkouts(workouts), [workouts]);
-
   const weeklyStreak = useMemo(
     () => getWeeklyWorkoutStreak(workouts),
     [workouts],
@@ -59,6 +62,18 @@ export default function HomeScreen() {
       >
         <Text style={globalStyles.title}>Workout Tracker</Text>
         <ScreenLoader message="Loading..." />
+      </ScrollView>
+    );
+  }
+
+  if (error) {
+    return (
+      <ScrollView
+        style={globalStyles.container}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <Text style={globalStyles.title}>Workout Tracker</Text>
+        <ScreenError message={error} onRetry={loadWorkouts} />
       </ScrollView>
     );
   }

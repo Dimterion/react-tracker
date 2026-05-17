@@ -98,7 +98,9 @@ export default function WorkoutsScreen() {
   if (error) {
     return (
       <View style={globalStyles.container}>
-        <Text style={globalStyles.title}>Workout History</Text>
+        <View style={globalStyles.header}>
+          <Text style={globalStyles.title}>Workout History</Text>
+        </View>
         <ScreenError message={error} onRetry={loadWorkouts} />
       </View>
     );
