@@ -1,3 +1,5 @@
+import ScreenError from "@/components/ScreenError";
+import ScreenLoader from "@/components/ScreenLoader";
 import { getProgressStats } from "@/features/workouts/utils/stats";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -7,21 +9,58 @@ import { WorkoutSession } from "../../features/workouts/types";
 import { colors, globalStyles } from "../../styles/global";
 
 export default function ProgressScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
+
+  const loadWorkouts = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data = await getWorkouts();
+      setWorkouts(data);
+    } catch (error) {
+      console.error("Failed to load workouts:", error);
+      setError("Unable to load data.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      const load = async () => {
-        const data = await getWorkouts();
-        setWorkouts(data);
-      };
-      load();
-    }, []),
+      loadWorkouts();
+    }, [loadWorkouts]),
   );
 
   const stats = useMemo(() => getProgressStats(workouts), [workouts]);
 
   const hasData = workouts.length > 0;
+
+  if (isLoading) {
+    return (
+      <ScrollView
+        style={globalStyles.container}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <Text style={globalStyles.title}>Progress</Text>
+        <ScreenLoader message="Loading..." />
+      </ScrollView>
+    );
+  }
+
+  if (error) {
+    return (
+      <ScrollView
+        style={globalStyles.container}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <Text style={globalStyles.title}>Progress</Text>
+        <ScreenError message={error} onRetry={loadWorkouts} />
+      </ScrollView>
+    );
+  }
 
   return (
     <ScrollView
@@ -94,16 +133,18 @@ export default function ProgressScreen() {
 
           <Text style={styles.sectionLabel}>By Category</Text>
           <View style={styles.statsGrid}>
-            {Object.entries(stats.categoryCounts).map(([cat, count]) => (
-              <View key={cat} style={styles.statCard}>
-                <View style={styles.statCardInner}>
-                  <Text style={styles.statValue}>{count}</Text>
-                  <Text style={styles.statLabel}>
-                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                  </Text>
+            {Object.entries(stats.categoryCounts)
+              .filter(([, count]) => count > 0)
+              .map(([cat, count]) => (
+                <View key={cat} style={styles.statCard}>
+                  <View style={styles.statCardInner}>
+                    <Text style={styles.statValue}>{count}</Text>
+                    <Text style={styles.statLabel}>
+                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
           </View>
         </>
       )}
