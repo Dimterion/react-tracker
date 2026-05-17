@@ -1,3 +1,4 @@
+import ScreenError from "@/components/ScreenError";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -25,20 +26,24 @@ const FILTER_OPTIONS: FilterOption[] = [
 
 export default function WorkoutsScreen() {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>("all");
 
-  const loadWorkouts = async () => {
+  const loadWorkouts = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
+
     try {
       const data = await getWorkouts();
       setWorkouts(data);
-    } catch (error) {
-      console.error("Failed to load workouts:", error);
+    } catch (err) {
+      console.error("Failed to load workouts:", err);
+      setError("Please try again in a moment.");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const handleClearAll = () => {
     Alert.alert(
@@ -65,7 +70,7 @@ export default function WorkoutsScreen() {
   useFocusEffect(
     useCallback(() => {
       loadWorkouts();
-    }, []),
+    }, [loadWorkouts]),
   );
 
   const filteredWorkouts = useMemo(() => {
@@ -86,6 +91,15 @@ export default function WorkoutsScreen() {
           <Text style={globalStyles.title}>Workout History</Text>
         </View>
         <ScreenLoader message="Loading..." />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={globalStyles.container}>
+        <Text style={globalStyles.title}>Workout History</Text>
+        <ScreenError message={error} onRetry={loadWorkouts} />
       </View>
     );
   }
