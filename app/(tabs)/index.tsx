@@ -1,4 +1,5 @@
 import ScreenError from "@/components/ScreenError";
+import LastWorkoutCard from "@/features/workouts/components/LastWorkoutCard";
 import {
   getRecentWorkouts,
   getWeeklyStats,
@@ -125,19 +126,10 @@ export default function HomeScreen() {
       </View>
 
       {lastWorkout ? (
-        <TouchableOpacity
-          style={styles.lastWorkoutCard}
+        <LastWorkoutCard
+          workout={lastWorkout}
           onPress={() => router.push(`/workouts/${lastWorkout.id}`)}
-        >
-          <Text style={styles.lastWorkoutLabel}>Last workout</Text>
-          <Text style={styles.lastWorkoutTitle}>{lastWorkout.title}</Text>
-          <Text style={styles.lastWorkoutMeta}>
-            {lastWorkout.category} • {lastWorkout.durationMinutes} min
-          </Text>
-          <Text style={styles.lastWorkoutDate}>
-            {formatWorkoutDate(lastWorkout.completedAt)}
-          </Text>
-        </TouchableOpacity>
+        />
       ) : null}
 
       <TouchableOpacity
