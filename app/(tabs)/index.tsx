@@ -1,12 +1,12 @@
 import ScreenError from "@/components/ScreenError";
 import LastWorkoutCard from "@/features/workouts/components/LastWorkoutCard";
+import RecentWorkoutsSection from "@/features/workouts/components/RecentWorkoutsSection";
 import WeeklySnapshotCard from "@/features/workouts/components/WeeklySnapshotCard";
 import {
   getRecentWorkouts,
   getWeeklyStats,
   getWeeklyWorkoutStreak,
 } from "@/features/workouts/utils/stats";
-import { formatWorkoutDate } from "@/utils/date";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -121,25 +121,10 @@ export default function HomeScreen() {
         ) : null}
       </View>
 
-      {recentWorkouts.length > 0 ? (
-        recentWorkouts.map((workout) => (
-          <TouchableOpacity
-            key={workout.id}
-            style={styles.recentCard}
-            onPress={() => router.push(`/workouts/${workout.id}`)}
-          >
-            <Text style={styles.recentTitle}>{workout.title}</Text>
-            <Text style={styles.recentMeta}>
-              {workout.category} • {workout.durationMinutes} min •{" "}
-              {formatWorkoutDate(workout.completedAt)}
-            </Text>
-          </TouchableOpacity>
-        ))
-      ) : (
-        <Text style={styles.recentEmpty}>
-          Your latest workouts will appear here.
-        </Text>
-      )}
+      <RecentWorkoutsSection
+        recentWorkouts={recentWorkouts}
+        onPressWorkout={(workoutId) => router.push(`/workouts/${workoutId}`)}
+      />
     </ScrollView>
   );
 }
