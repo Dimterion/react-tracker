@@ -9,13 +9,7 @@ import {
 } from "@/features/workouts/utils/stats";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import ScreenLoader from "../../components/ScreenLoader";
 import { getWorkouts } from "../../features/workouts/storage";
 import { WorkoutSession } from "../../features/workouts/types";
@@ -112,17 +106,10 @@ export default function HomeScreen() {
         <Text style={styles.secondaryButtonText}>View History</Text>
       </TouchableOpacity>
 
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Recent Workouts</Text>
-        {workouts.length > 0 ? (
-          <TouchableOpacity onPress={() => router.push("/workouts")}>
-            <Text style={styles.seeAllText}>See all</Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
-
       <RecentWorkoutsSection
         recentWorkouts={recentWorkouts}
+        showSeeAll={workouts.length > 0}
+        onSeeAllPress={() => router.push("/workouts")}
         onPressWorkout={(workoutId) => router.push(`/workouts/${workoutId}`)}
       />
     </ScrollView>
@@ -155,43 +142,5 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 16,
     fontWeight: "600",
-  },
-  sectionHeader: {
-    marginTop: 28,
-    marginBottom: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  seeAllText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: colors.primary,
-  },
-  recentCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 10,
-  },
-  recentTitle: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: colors.text,
-  },
-  recentMeta: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    marginTop: 4,
-    textTransform: "capitalize",
-  },
-  recentEmpty: {
-    fontSize: 14,
-    color: colors.textSecondary,
   },
 });
