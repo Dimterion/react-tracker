@@ -1,12 +1,19 @@
 import { useWorkoutForm } from "@/features/workouts/hooks/useWorkoutForm";
 import * as Haptics from "expo-haptics";
-import { router } from "expo-router";
-import { Alert, ScrollView, Text } from "react-native";
-import WorkoutForm from "../../features/workouts/components/WorkoutForm";
-import { addWorkout } from "../../features/workouts/storage";
-import { globalStyles } from "../../styles/global";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, ScrollView, Text, View } from "react-native";
+import WorkoutForm from "../../../../features/workouts/components/WorkoutForm";
+import {
+  getWorkoutById,
+  updateWorkout,
+} from "../../../../features/workouts/storage";
+import { globalStyles } from "../../../../styles/global";
 
-export default function NewWorkoutScreen() {
+export default function EditWorkoutScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const [loading, setLoading] = useState(true);
+
   const {
     title,
     setTitle,
@@ -16,7 +23,9 @@ export default function NewWorkoutScreen() {
     setNotes,
     category,
     setCategory,
+    completedAt,
     exercises,
+    initializeForm,
     addExercise,
     removeExercise,
     updateExerciseName,
@@ -26,7 +35,31 @@ export default function NewWorkoutScreen() {
     getCleanedExercises,
   } = useWorkoutForm();
 
-  const handleSaveWorkout = async () => {
+  useEffect(() => {
+    const loadWorkout = async () => {
+      if (!id) return;
+
+      const workout = await getWorkoutById(id);
+
+      if (!workout) {
+        Alert.alert("Error", "Workout not found.");
+        router.back();
+        return;
+      }
+
+      initializeForm(workout);
+      setLoading(false);
+    };
+
+    loadWorkout();
+  }, [id, initializeForm]);
+
+  const handleUpdateWorkout = async () => {
+    if (!id) {
+      Alert.alert("Error", "Workout ID is missing.");
+      return;
+    }
+
     const parsedDuration = Number(durationMinutes);
 
     if (!title.trim() || !durationMinutes || Number.isNaN(parsedDuration)) {
@@ -44,26 +77,35 @@ export default function NewWorkoutScreen() {
       return;
     }
 
-    await addWorkout({
+    await updateWorkout({
+      id,
       title: title.trim(),
       category,
       durationMinutes: parsedDuration,
-      completedAt: new Date().toISOString(),
+      completedAt,
       notes: notes.trim(),
       exercises: cleanedExercises,
     });
 
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Alert.alert("Success", "Workout added successfully!");
+    Alert.alert("Success", "Workout updated successfully!");
     router.back();
   };
+
+  if (loading) {
+    return (
+      <View style={globalStyles.container}>
+        <Text style={globalStyles.title}>Loading workout...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
       style={globalStyles.container}
       contentContainerStyle={{ paddingBottom: 32 }}
     >
-      <Text style={globalStyles.title}>New Workout</Text>
+      <Text style={globalStyles.title}>Edit Workout</Text>
       <WorkoutForm
         title={title}
         onTitleChange={setTitle}
@@ -80,8 +122,8 @@ export default function NewWorkoutScreen() {
         onAddSet={addSetToExercise}
         onUpdateSetField={updateSetField}
         onRemoveSet={removeSetFromExercise}
-        onSubmit={handleSaveWorkout}
-        submitLabel="Save Workout"
+        onSubmit={handleUpdateWorkout}
+        submitLabel="Update Workout"
       />
     </ScrollView>
   );

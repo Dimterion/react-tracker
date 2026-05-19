@@ -1,9 +1,12 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { deleteWorkout, getWorkoutById } from "../../features/workouts/storage";
-import { WorkoutSession } from "../../features/workouts/types";
-import { colors, globalStyles } from "../../styles/global";
+import {
+  deleteWorkout,
+  getWorkoutById,
+} from "../../../features/workouts/storage";
+import { WorkoutSession } from "../../../features/workouts/types";
+import { colors, globalStyles } from "../../../styles/global";
 
 export default function WorkoutDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

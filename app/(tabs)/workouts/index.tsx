@@ -9,11 +9,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ScreenLoader from "../../components/ScreenLoader";
-import WorkoutListItem from "../../features/workouts/components/WorkoutListItem";
-import { clearAllWorkouts, getWorkouts } from "../../features/workouts/storage";
-import { WorkoutCategory, WorkoutSession } from "../../features/workouts/types";
-import { colors, globalStyles } from "../../styles/global";
+import ScreenLoader from "../../../components/ScreenLoader";
+import WorkoutListItem from "../../../features/workouts/components/WorkoutListItem";
+import {
+  clearAllWorkouts,
+  getWorkouts,
+} from "../../../features/workouts/storage";
+import {
+  WorkoutCategory,
+  WorkoutSession,
+} from "../../../features/workouts/types";
+import { colors, globalStyles } from "../../../styles/global";
 
 type FilterOption = "all" | WorkoutCategory;
 
