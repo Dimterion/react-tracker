@@ -1,19 +1,19 @@
 import ScreenError from "@/components/ScreenError";
+import ScreenLoader from "@/components/ScreenLoader";
 import LastWorkoutCard from "@/features/workouts/components/LastWorkoutCard";
 import RecentWorkoutsSection from "@/features/workouts/components/RecentWorkoutsSection";
 import WeeklySnapshotCard from "@/features/workouts/components/WeeklySnapshotCard";
+import { getWorkouts } from "@/features/workouts/storage";
+import { WorkoutSession } from "@/features/workouts/types";
 import {
   getRecentWorkouts,
   getWeeklyStats,
   getWeeklyWorkoutStreak,
 } from "@/features/workouts/utils/stats";
+import { colors, globalStyles } from "@/styles/global";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
-import ScreenLoader from "../../components/ScreenLoader";
-import { getWorkouts } from "../../features/workouts/storage";
-import { WorkoutSession } from "../../features/workouts/types";
-import { colors, globalStyles } from "../../styles/global";
 
 export default function HomeScreen() {
   const [isLoading, setIsLoading] = useState(true);
@@ -118,7 +118,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingBottom: 24,
+    paddingBottom: 100,
   },
   primaryButton: {
     backgroundColor: colors.primary,
